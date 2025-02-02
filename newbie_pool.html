@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新手寻访 - 终末地抽卡模拟</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1600px;
+        }
+        img.logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .result {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .card {
+            width: 128px;
+            height: 128px;
+            overflow: hidden;
+            background-color: #fafafa;
+            text-align: center;
+            padding-top: 10px;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .card-name {
+            font-size: 15px;
+            margin-top: 0px;
+            color: black; 
+        }
+        .card.6star .card-name {
+            color: orange;
+        }
+        .card.5star .card-name {
+            color: gold;
+        }
+        .card.4star .card-name {
+            color: purple; 
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            background-color: #d3d3d3;
+            color: black;
+            border: none;
+        }
+        button:hover {
+            background-color: #bbb;
+        }
+        .btn-yellow {
+            background-color: yellow;
+            color: black;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        #visit-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        #counter {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        .modal img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="resources/logo.png" class="logo" alt="Logo">
+    <h2>新手寻访</h2>
+    <p>包含六星：洁尔佩塔、余烬、黎风</p>
+
+    <button onclick="performDraw('single')">寻访一次</button>
+    <button class="btn-yellow" onclick="performDraw('multi')">寻访十次</button>
+
+    <div class="result" id="result"></div>
+    <div id="visit-info"></div>
+    
+    <!-- 返回主页按钮 -->
+    <button onclick="window.location.href='index.html'">返回主页</button>
+
+    <!-- 刷新按钮 -->
+    <button onclick="window.location.reload();">刷新卡池</button>
+
+    <!-- 显示抽卡次数 -->
+    <div id="counter">当前抽卡次数: 0</div>
+</div>
+
+<!-- Background music -->
+<audio id="bgm" loop>
+    <source src="resources/background_music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+// 角色池（头像和名字，所有图片位于 resources 文件夹）
+const newbiePool = [
+    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star' },
+    { name: '黎风', img: 'resources/6star2.png', rarity: '6star' },
+    { name: '余烬', img: 'resources/6star3.png', rarity: '6star' },
+    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star' },
+    { name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
+    { name: '大潘', img: 'resources/5star3.png', rarity: '5star' },
+    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star' },
+    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star' },
+    { name: '赛希', img: 'resources/4star2.png', rarity: '4star' },
+    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star' },
+    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star' }
+];
+
+let totalCardsDrawn = 0; // 总抽卡次数
+let hasSixStar = false;  // 标记是否已经抽到六星
+let drawnCards = [];  // 用于记录当前抽到的卡
+
+// 六星、五星和四星的概率
+const sixStarChance = 0.008;  // 0.8% 六星概率
+const fiveStarChance = 0.08;  // 8% 五星概率
+const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
+
+// 抽卡函数
+function performDraw(type) {
+    // 播放背景音乐
+    const bgm = document.getElementById("bgm");
+    bgm.play();
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = '';  // 清空上次的结果
+
+    if (hasSixStar) {
+        alert("已抽到六星角色，无法继续抽卡！");
+        return;
+    }
+
+    // 更新抽卡次数
+    let cardsToDraw = (type === 'multi') ? 10 : 1;  // 十连抽为10次
+
+    // 记录当前的抽卡开始编号
+    drawnCards = [];
+    let noFiveOrSixStar = true;
+
+    for (let i = 0; i < cardsToDraw; i++) {
+        if (hasSixStar || totalCardsDrawn >= 50) {
+			alert("已抽到六星角色，无法继续抽卡！");
+			break;// 如果已抽到六星，或者已达最大抽卡数50，停止抽卡
+		}
+
+        totalCardsDrawn++;  // 每抽一次，总抽卡数加1
+
+        // 如果是第50次抽卡，强制出六星
+        if (totalCardsDrawn === 50) {
+            let character = generateCharacterByProbability(true, false, 0, 1); // 第50次必须六星
+            drawnCards.push(character);
+            break;
+        }
+
+        // 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
+        if (i === 9 && noFiveOrSixStar) {
+            let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+            drawnCards.push(character);
+        } else {
+            let character = generateCharacterByProbability(false, false);
+            drawnCards.push(character);
+            if (character.rarity === '5star' || character.rarity === '6star') {
+                noFiveOrSixStar = false;
+            }
+        }
+
+        // 如果在抽卡过程中已经抽到六星，立即停止抽取
+        if (drawnCards[i].rarity === '6star') {
+            hasSixStar = true;
+            break;
+        }
+    }
+
+    // 输出抽到的卡
+    drawnCards.forEach((character) => {
+        const card = document.createElement("div");
+        card.className = `card ${character.rarity}`;
+
+        let img = document.createElement("img");
+        img.src = character.img;
+        card.appendChild(img);
+
+        let name = document.createElement("div");
+        name.className = "card-name";
+        name.textContent = character.name;
+        card.appendChild(name);
+
+        resultDiv.appendChild(card);
+    });
+
+    // 更新抽卡计数器
+    document.getElementById("counter").textContent = `当前抽卡次数: ${totalCardsDrawn}`;
+}
+
+// 根据概率生成角色
+function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false, minChance = 0, maxChance = 1) {
+    if (forceSixStar) {
+        return newbiePool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 3)];
+    }
+	
+    if (forceFiveStar) {
+        return newbiePool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 4)];
+    }
+	
+    let randomValue = Math.random();  // 生成 0 到 1 之间的随机数
+
+    if (randomValue < sixStarChance) {
+        return newbiePool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 3)];
+    } else if (randomValue < sixStarChance + fiveStarChance) {
+        return newbiePool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 4)];
+    } else {
+        return newbiePool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+    }
+}
+</script>
+
+</body>
+</html>
