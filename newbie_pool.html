@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +67,6 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
             background-color: #d3d3d3;
             color: black;
             border: none;
@@ -119,6 +118,17 @@
         .modal img {
             width: 100%;
         }
+        /* 新增的样式: 按钮容器 */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .button-container button {
+            flex: 1;
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -128,23 +138,27 @@
     <h2>新手寻访</h2>
     <p>包含六星：洁尔佩塔、余烬、黎风</p>
 
-    <!-- 只保留十连抽按钮 -->
-    <button class="btn-yellow" onclick="performDraw()">寻访十次</button>
-
     <div class="result" id="result"></div>
-    <div id="visit-info"></div>
-    
-    <!-- 返回主页按钮 -->
-    <button onclick="window.location.href='index.html'">返回主页</button>
 
-    <!-- 刷新按钮 -->
-    <button onclick="window.location.reload();">刷新卡池</button>
+    <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
+    <div class="button-container">
+        <!-- 返回主页按钮 -->
+        <button onclick="window.location.href='index.html'">返回主页</button>
+        
+        <!-- 刷新按钮 -->
+        <button onclick="window.location.reload();">刷新卡池</button>
+        
+        <!-- 只保留十连抽按钮 -->
+        <button class="btn-yellow" onclick="performDraw()">寻访十次</button>
+    </div>
 
     <!-- 显示抽卡次数 -->
     <div id="counter">当前抽卡次数: 0</div>
 
     <!-- 显示角色被抽到的次数 -->
     <div id="drawn-statistics"></div>
+
+    <div id="visit-info"></div>
 </div>
 
 <!-- Background music -->
