@@ -76,37 +76,8 @@
             color: #444;
             margin-top: 10px;
         }
-        .login-container {
-            display: block;
-            width: 100%;
-        }
         .main-content {
-            display: none;
-        }
-        .login-btn {
-            background-color: black;
-            color: white;
-            border-radius: 20px;
-            padding: 12px 24px;  /* 调整按钮的大小 */
-            font-size: 16px;
-            margin-top: 20px;  /* 登录按钮距离输入框的间距 */
-            width: 100%;
-        }
-        .input-field {
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            margin-top: 10px;
-            width: 100%;
-            max-width: 300px;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .welcome-message {
-            font-size: 30px;
-            font-weight: bold;
-            margin-bottom: 20px;
         }
         .pool-buttons button {
             font-size: 14px;  /* 调整卡池按钮字体为较小 */
@@ -117,19 +88,9 @@
 <body>
 
 <div class="container">
-    <!-- 登录界面 -->
-    <div class="login-container">
-        <img src="resources/logo.png" class="logo" alt="Logo">
-        <h2>Welcome to Talos-II</h2>
-        <input type="text" id="username" class="input-field" placeholder="请输入用户名" />
-        <input type="password" id="password" class="input-field" placeholder="请输入密码（乱输也行）" />
-        <button class="login-btn" onclick="login()">登录系统</button>
-    </div>
-    
     <!-- 主内容（卡池选择） -->
     <div class="main-content">
         <img src="resources/logo.png" class="logo" alt="Logo">
-        <div id="welcome-message" class="welcome-message"></div> <!-- Welcome 用户名 -->
         <h2>选择卡池</h2>
         <div class="pool-buttons">
             <button class="black-color" onclick="window.location.href='newbie_pool.html'">新手寻访</button>
@@ -154,17 +115,6 @@
 </audio>
 
 <script>
-	window.onload = function() {
-        var storedUsername = localStorage.getItem('username');
-        var storedPassword = localStorage.getItem('password');
-        
-        if (storedUsername) {
-            document.getElementById('username').value = storedUsername;
-        }
-        if (storedPassword) {
-            document.getElementById('password').value = storedPassword;
-        }
-    };
     // 监听鼠标移动事件
     window.addEventListener('mousemove', function() {
         var bgm = document.getElementById("bgm");
@@ -174,27 +124,6 @@
             bgm.play();
         }
     });
-
-    // 登录处理函数
-    function login() {
-        var username = document.getElementById("username").value.trim();
-        if (!username) {
-            username = "Endministrator"; // 若用户名为空，设定为 "Endministrator"
-        }
-
-        // 隐藏登录界面，显示卡池选择界面
-        document.querySelector('.login-container').style.display = 'none';
-        document.querySelector('.main-content').style.display = 'block';
-        
-        // 输出欢迎信息
-        document.getElementById("welcome-message").innerHTML = `Welcome, ${username}`;
-		var username = document.getElementById('username').value;
-		var password = document.getElementById('password').value;
-		if (username && password) {
-            localStorage.setItem('username', username);
-			localStorage.setItem('password', password);
-        }
-    }
 
     // 显示/隐藏免责声明内容
     function toggleDisclaimer() {

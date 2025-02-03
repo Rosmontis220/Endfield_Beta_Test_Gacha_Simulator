@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新手寻访 - 终末地抽卡模拟</title>
+    <title>知与行 - 终末地抽卡模拟</title>
 	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
 		body {
@@ -119,6 +119,21 @@
 		.modal img {
 			width: 100%;
 		}
+		.orange-text {
+			color: orange;
+		}
+
+		.gold-text {
+			color: gold;
+		}
+
+		.black-text {
+			color: black;
+		}
+		
+		.magenta-text {
+			color: magenta;
+		}
     /* 新增的样式: 按钮容器 */
 		.button-container {
 			display: flex;
@@ -137,8 +152,13 @@
 
 <div class="container">
     <img src="resources/logo.png" class="logo" alt="Logo">
-    <h2>新手寻访</h2>
-    <p>包含六星：洁尔佩塔、余烬、黎风</p>
+    <h2 class='magenta-text'>知与行</h2>
+    <p>
+		<span class="orange-text">伊冯 </span> 
+        <span class="gold-text">弧光 </span> 
+        <span class="black-text">UP</span>
+		
+	</p>
 
     <div class="result" id="result"></div>
 
@@ -171,11 +191,18 @@
 
 <script>
 // 角色池（头像和名字，所有图片位于 resources 文件夹）
-const newbiePool = [
+const MagmaPool = [
     { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star' },
     { name: '黎风', img: 'resources/6star2.png', rarity: '6star' },
     { name: '余烬', img: 'resources/6star3.png', rarity: '6star' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
     { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star' },
+	{ name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
+	{ name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
     { name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
     { name: '大潘', img: 'resources/5star3.png', rarity: '5star' },
     { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star' },
@@ -186,14 +213,16 @@ const newbiePool = [
 ];
 
 let totalCardsDrawn = 0; // 总抽卡次数
-let hasSixStar = false;  // 标记是否已经抽到六星
 let drawnCards = [];  // 用于记录当前抽到的卡
+let noSixStarCount = 0; // 未抽到六星次数
 
 // 角色被抽到的统计
 let characterDrawCounts = {
     '洁尔佩塔': 0,
     '黎风': 0,
     '余烬': 0,
+	'莱万汀': 0,
+	'伊冯': 0,
     '艾维文娜': 0,
     '弧光': 0,
     '大潘': 0,
@@ -218,53 +247,61 @@ function performDraw() {
     const resultDiv = document.getElementById("result");
     resultDiv.innerHTML = '';  // 清空上次的结果
 
-    if (hasSixStar) {
-        alert("已抽到六星角色，无法继续抽卡！");
-        return;
-    }
-
     // 更新抽卡次数
     let cardsToDraw = 10;  // 十连抽为10次
 
     // 记录当前的抽卡开始编号
     drawnCards = [];
     let noFiveOrSixStar = true;
+    let isSixStarDrawn = false; // 标记是否抽到六星
 
     for (let i = 0; i < cardsToDraw; i++) {
-        if (hasSixStar && totalCardsDrawn % 10 === 0 || totalCardsDrawn >= 50) {
-            alert("已抽到六星角色，无法继续抽卡！");
-            break; // 如果已抽到六星，或者已达最大抽卡数50，停止抽卡
-        }
-
         totalCardsDrawn++;  // 每抽一次，总抽卡数加1
 
-        // 如果是第50次抽卡且前49次未出六星，强制出六星
-        if (totalCardsDrawn === 50 && !hasSixStar) {
-            let character = generateCharacterByProbability(true, false, 0, 1); // 第50次必须六星
+        // 第120抽必出伊冯
+        if (totalCardsDrawn === 120) {
+            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star' }; // 直接出伊冯
             drawnCards.push(character);
-            hasSixStar = true; // 强制触发六星
-			characterDrawCounts[drawnCards[i].name]++;
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
             break;
         }
-
-        // 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
-        if (i === 9 && noFiveOrSixStar) {
-            let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+        
+        // 如果是第80次抽卡且前79次未出六星，强制出六星
+        if (noSixStarCount === 79) {
+            let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
             drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+            isSixStarDrawn = true; // 记录六星已经抽到
         } else {
-            let character = generateCharacterByProbability(false, false);
-            drawnCards.push(character);
-            if (character.rarity === '5star' || character.rarity === '6star') {
-                noFiveOrSixStar = false;
-            }
+			// 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
+			if (i === 9 && noFiveOrSixStar) {
+				let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+				drawnCards.push(character);
+				characterDrawCounts[drawnCards[i].name]++;
+			} else {
+				let character = generateCharacterByProbability(false, false);
+				drawnCards.push(character);
+				characterDrawCounts[drawnCards[i].name]++;
+				if (character.rarity === '5star' || character.rarity === '6star') {
+					noFiveOrSixStar = false;
+				}
+				if (character.rarity === '6star') {
+					isSixStarDrawn = true;
+				}
+			}
         }
-
-        // 更新角色统计
-        characterDrawCounts[drawnCards[i].name]++;
-
-        // 如果在抽卡过程中已经抽到六星，继续进行后续的抽卡，但不再进行更多抽卡
+        
+        // 如果已抽到六星且是十连最后一抽时，不再中断
+        if (isSixStarDrawn && i === 9) {
+            break;
+        }
+        
         if (drawnCards[i].rarity === '6star') {
-            hasSixStar = true;
+            noSixStarCount = 0;
+        } else {
+            noSixStarCount++;
         }
     }
 
@@ -289,13 +326,24 @@ function performDraw() {
 // 生成角色数据
 function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false) {
     let roll = Math.random();
-    if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
-        return newbiePool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 3)];
-    } else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
-        return newbiePool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 4)];
-    } else {
-        return newbiePool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
-    }
+	if (noSixStarCount < 65) {
+		if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
+			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
+		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
+			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
+		} else {
+			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+		}
+	} else {
+		let NewChance = (noSixStarCount - 65) * 0.05;
+		if (forceSixStar || (roll < sixStarChance + NewChance && !forceFiveStar)) {
+			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
+		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance + NewChance && !forceSixStar)) {
+			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
+		} else {
+			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+		}
+	}
 }
 
 // 更新角色被抽到的次数
@@ -305,7 +353,7 @@ function displayDrawnStatistics() {
     for (let character in characterDrawCounts) {
         const count = characterDrawCounts[character];
         let rarityClass = '';
-        switch (newbiePool.find(c => c.name === character).rarity) {
+        switch (MagmaPool.find(c => c.name === character).rarity) {
             case '6star':
                 rarityClass = 'orange'; break;
             case '5star':
