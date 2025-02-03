@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新手寻访 - 终末地抽卡模拟</title>
+	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
         body {
             display: flex;
@@ -91,6 +92,12 @@
             font-size: 16px;
             color: #333;
         }
+        #drawn-statistics {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: left;
+        }
         .modal {
             position: fixed;
             top: 0;
@@ -121,8 +128,8 @@
     <h2>新手寻访</h2>
     <p>包含六星：洁尔佩塔、余烬、黎风</p>
 
-    <button onclick="performDraw('single')">寻访一次</button>
-    <button class="btn-yellow" onclick="performDraw('multi')">寻访十次</button>
+    <!-- 只保留十连抽按钮 -->
+    <button class="btn-yellow" onclick="performDraw()">寻访十次</button>
 
     <div class="result" id="result"></div>
     <div id="visit-info"></div>
@@ -135,6 +142,9 @@
 
     <!-- 显示抽卡次数 -->
     <div id="counter">当前抽卡次数: 0</div>
+
+    <!-- 显示角色被抽到的次数 -->
+    <div id="drawn-statistics"></div>
 </div>
 
 <!-- Background music -->
@@ -163,13 +173,28 @@ let totalCardsDrawn = 0; // 总抽卡次数
 let hasSixStar = false;  // 标记是否已经抽到六星
 let drawnCards = [];  // 用于记录当前抽到的卡
 
+// 角色被抽到的统计
+let characterDrawCounts = {
+    '洁尔佩塔': 0,
+    '黎风': 0,
+    '余烬': 0,
+    '艾维文娜': 0,
+    '弧光': 0,
+    '大潘': 0,
+    '佩丽卡': 0,
+    '昼雪': 0,
+    '赛希': 0,
+    '陈千语': 0,
+    '狼卫': 0
+};
+
 // 六星、五星和四星的概率
 const sixStarChance = 0.008;  // 0.8% 六星概率
 const fiveStarChance = 0.08;  // 8% 五星概率
 const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
 
 // 抽卡函数
-function performDraw(type) {
+function performDraw() {
     // 播放背景音乐
     const bgm = document.getElementById("bgm");
     bgm.play();
@@ -183,24 +208,26 @@ function performDraw(type) {
     }
 
     // 更新抽卡次数
-    let cardsToDraw = (type === 'multi') ? 10 : 1;  // 十连抽为10次
+    let cardsToDraw = 10;  // 十连抽为10次
 
     // 记录当前的抽卡开始编号
     drawnCards = [];
     let noFiveOrSixStar = true;
 
     for (let i = 0; i < cardsToDraw; i++) {
-        if (hasSixStar || totalCardsDrawn >= 50) {
-			alert("已抽到六星角色，无法继续抽卡！");
-			break;// 如果已抽到六星，或者已达最大抽卡数50，停止抽卡
-		}
+        if (hasSixStar && totalCardsDrawn % 10 === 0 || totalCardsDrawn >= 50) {
+            alert("已抽到六星角色，无法继续抽卡！");
+            break; // 如果已抽到六星，或者已达最大抽卡数50，停止抽卡
+        }
 
         totalCardsDrawn++;  // 每抽一次，总抽卡数加1
 
-        // 如果是第50次抽卡，强制出六星
-        if (totalCardsDrawn === 50) {
+        // 如果是第50次抽卡且前49次未出六星，强制出六星
+        if (totalCardsDrawn === 50 && !hasSixStar) {
             let character = generateCharacterByProbability(true, false, 0, 1); // 第50次必须六星
             drawnCards.push(character);
+            hasSixStar = true; // 强制触发六星
+			characterDrawCounts[drawnCards[i].name]++;
             break;
         }
 
@@ -216,55 +243,63 @@ function performDraw(type) {
             }
         }
 
-        // 如果在抽卡过程中已经抽到六星，立即停止抽取
+        // 更新角色统计
+        characterDrawCounts[drawnCards[i].name]++;
+
+        // 如果在抽卡过程中已经抽到六星，继续进行后续的抽卡，但不再进行更多抽卡
         if (drawnCards[i].rarity === '6star') {
             hasSixStar = true;
-            break;
         }
     }
 
     // 输出抽到的卡
     drawnCards.forEach((character) => {
-        const card = document.createElement("div");
-        card.className = `card ${character.rarity}`;
-
-        let img = document.createElement("img");
-        img.src = character.img;
-        card.appendChild(img);
-
-        let name = document.createElement("div");
-        name.className = "card-name";
-        name.textContent = character.name;
-        card.appendChild(name);
-
+        const card = document.createElement('div');
+        card.classList.add('card', character.rarity);
+        card.innerHTML = `
+            <img src="${character.img}" alt="${character.name}">
+            <div class="card-name">${character.name}</div>
+        `;
         resultDiv.appendChild(card);
     });
 
-    // 更新抽卡计数器
-    document.getElementById("counter").textContent = `当前抽卡次数: ${totalCardsDrawn}`;
+    // 更新当前抽卡次数显示
+    document.getElementById("counter").innerText = `当前抽卡次数: ${totalCardsDrawn}`;
+
+    // 显示角色被抽到的次数
+    displayDrawnStatistics();
 }
 
-// 根据概率生成角色
-function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false, minChance = 0, maxChance = 1) {
-    if (forceSixStar) {
+// 生成角色数据
+function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false) {
+    let roll = Math.random();
+    if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
         return newbiePool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 3)];
-    }
-	
-    if (forceFiveStar) {
-        return newbiePool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 4)];
-    }
-	
-    let randomValue = Math.random();  // 生成 0 到 1 之间的随机数
-
-    if (randomValue < sixStarChance) {
-        return newbiePool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 3)];
-    } else if (randomValue < sixStarChance + fiveStarChance) {
+    } else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
         return newbiePool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 4)];
     } else {
         return newbiePool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
     }
 }
-</script>
 
+// 更新角色被抽到的次数
+function displayDrawnStatistics() {
+    const statsDiv = document.getElementById('drawn-statistics');
+    statsDiv.innerHTML = '';
+    for (let character in characterDrawCounts) {
+        const count = characterDrawCounts[character];
+        let rarityClass = '';
+        switch (newbiePool.find(c => c.name === character).rarity) {
+            case '6star':
+                rarityClass = 'orange'; break;
+            case '5star':
+                rarityClass = 'gold'; break;
+            case '4star':
+                rarityClass = 'purple'; break;
+        }
+        statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
+    }
+}
+</script>
 </body>
 </html>
