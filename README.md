@@ -1,6 +1,7 @@
 # Endfield Beta Test Gacha Simulator
 A website simulating Endfield Beta Test gacha.
-Now Newbie Pool & Laevantin Pool & Yvonne Pool Updated.
+Now Newbie Pool & Laevatain Pool & Yvonne Pool Updated.
+(English is not supported, so please keep your translation tool on.)
 
 # 终末地二测抽卡模拟器
 模拟终末地二测抽卡
