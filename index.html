@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>主页 - 终末地抽卡模拟</title>
-	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
         body {
-            font-family: 'Microsoft YaHei', sans-serif;  /* 黑体 */
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            background-image: url('resources/background1.jpg');
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
             flex-direction: column;
             text-align: center;
         }
         .container {
-            background-color: white;
+            background-image: url('resources/background2.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 90%;
             max-width: 600px;
         }
-		img.logo {
-            width: 100%; /* 设置 logo 与输入框同宽 */
-            max-width: 300px; /* 限制最大宽度 */
+        img.logo {
+            width: 100%;
+            max-width: 300px;
             margin-bottom: 20px;
         }
         button {
@@ -36,7 +40,7 @@
             border-radius: 20px;
             cursor: pointer;
             margin-top: 20px;
-            background-color: #d3d3d3;  /* 灰白色 */
+            background-color: #d3d3d3;
             color: black;
             border: none;
             width: 100%;
@@ -44,24 +48,20 @@
         button:hover {
             background-color: #bbb;
         }
-		.black-color {
-			color: black;
-		}
-		.red-color {
-			color: red;
-		}
-		.magenta-color {
-			color: magenta;
-		}
-        #extra-buttons {
-            display: none;  /* 初始隐藏 */
-            margin-top: 20px;
+        .black-color {
+            color: black;
+        }
+        .red-color {
+            color: red;
+        }
+        .magenta-color {
+            color: magenta;
         }
         .disclaimer-btn {
             margin-top: 30px;
             font-size: 14px;
             color: white;
-            background-color: #007BFF; /* 蓝色按钮 */
+            background-color: #007BFF;
             padding: 12px 24px;
             border-radius: 20px;
             cursor: pointer;
@@ -87,9 +87,9 @@
             background-color: black;
             color: white;
             border-radius: 20px;
-            padding: 12px 24px;  /* 调整按钮的大小 */
+            padding: 12px 24px;
             font-size: 16px;
-            margin-top: 20px;  /* 登录按钮距离输入框的间距 */
+            margin-top: 20px;
             width: 100%;
         }
         .input-field {
@@ -109,7 +109,7 @@
             margin-bottom: 20px;
         }
         .pool-buttons button {
-            font-size: 14px;  /* 调整卡池按钮字体为较小 */
+            font-size: 14px;
             padding: 8px 16px;
         }
     </style>
@@ -123,38 +123,37 @@
         <h1>Welcome to Talos-II</h1>
         <input type="text" id="username" class="input-field" placeholder="请输入用户名" />
         <input type="password" id="password" class="input-field" placeholder="请输入密码（乱输也行）" />
-        <button class="login-btn" onclick="login()">登录系统</button>
+        <button class="login-btn" onclick="playClickSound(); login()">登录系统</button>
     </div>
     
     <!-- 主内容（卡池选择） -->
     <div class="main-content">
         <img src="resources/logo.png" class="logo" alt="Logo">
-        <div id="welcome-message" class="welcome-message"></div> <!-- Welcome 用户名 -->
+        <div id="welcome-message" class="welcome-message"></div>
         <h2>选择卡池</h2>
         <div class="pool-buttons">
-            <button class="black-color" onclick="window.location.href='newbie_pool.html'">新手寻访</button>
-            <button class="red-color" onclick="window.location.href='magma_pool.html'">熔火灼痕</button>
-            <button class="magenta-color" onclick="window.location.href='know_pool.html'">知与行</button>
+            <button class="black-color" onclick="playClickSound(); window.location.href='newbie_pool.html'">新手寻访</button>
+            <button class="red-color" onclick="playClickSound(); window.location.href='magma_pool.html'">熔火灼痕</button>
+            <button class="magenta-color" onclick="playClickSound(); window.location.href='know_pool.html'">知与行</button>
         </div>
 
-        <!-- 免责声明按钮 -->
-        <button class="disclaimer-btn" onclick="toggleDisclaimer()">查看免责声明</button>
+        <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看免责声明</button>
 
-        <!-- 免责声明内容 -->
         <div class="disclaimer-content" id="disclaimer-content">
-            <p>本抽卡模拟器内所有角色、头像、概率及相关内容均来自鹰角网络的游戏《明日方舟终末地》，并非官方模拟器，仅为娱乐用途，不代表任何实际游戏中的抽卡结果，用户应理解本模拟器并不会影响或模拟现实游戏中的抽卡系统。由于我没有测试资格，所有内容均基于我认为的终末地的抽卡机制，因此如有理解错误等因素导致本模拟器模拟结果不正确，我不负任何责任。作者：星幻_StarRev，B站小黑盒森空岛等平台同名，github与其他极少数平台用户名：Rosmontis220。</p>
+            <p>本抽卡模拟器内所有角色、头像、概率及相关内容均来自鹰角网络的游戏《明日方舟终末地》，并非官方模拟器，仅为娱乐用途...</p>
         </div>
     </div>
 </div>
 
-<!-- 背景音乐 -->
+<!-- 音效 -->
+<audio id="click-sound" src="resources/click.mp3" preload="auto"></audio>
 <audio id="bgm" loop>
     <source src="resources/index_bgm.mp3" type="audio/mp3">
     您的浏览器不支持 audio 元素。
 </audio>
 
 <script>
-	window.onload = function() {
+    window.onload = function() {
         var storedUsername = localStorage.getItem('username');
         var storedPassword = localStorage.getItem('password');
         
@@ -165,38 +164,32 @@
             document.getElementById('password').value = storedPassword;
         }
     };
-    // 监听鼠标移动事件
+
     window.addEventListener('mousemove', function() {
         var bgm = document.getElementById("bgm");
-
-        // 播放背景音乐，只播放一次
         if (bgm.paused) {
             bgm.play();
         }
     });
 
-    // 登录处理函数
     function login() {
         var username = document.getElementById("username").value.trim();
         if (!username) {
             username = "Endministrator"; // 若用户名为空，设定为 "Endministrator"
         }
 
-        // 隐藏登录界面，显示卡池选择界面
         document.querySelector('.login-container').style.display = 'none';
         document.querySelector('.main-content').style.display = 'block';
-        
-        // 输出欢迎信息
         document.getElementById("welcome-message").innerHTML = `Welcome, ${username}`;
-		var username = document.getElementById('username').value;
-		var password = document.getElementById('password').value;
-		if (username && password) {
+
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        if (username && password) {
             localStorage.setItem('username', username);
-			localStorage.setItem('password', password);
+            localStorage.setItem('password', password);
         }
     }
 
-    // 显示/隐藏免责声明内容
     function toggleDisclaimer() {
         var content = document.getElementById('disclaimer-content');
         if (content.style.display === 'none' || content.style.display === '') {
@@ -206,9 +199,10 @@
         }
     }
 
-    // 关闭免责声明内容
-    function closeDisclaimer() {
-        document.getElementById('disclaimer-content').style.display = 'none';
+    function playClickSound() {
+        var clickSound = document.getElementById("click-sound");
+        clickSound.currentTime = 0; // 确保每次点击时从头播放音效
+        clickSound.play();
     }
 </script>
 

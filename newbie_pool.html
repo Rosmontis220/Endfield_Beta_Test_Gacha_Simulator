@@ -7,6 +7,9 @@
 	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
 		body {
+			background-image: url('resources/background1.jpg');
+            background-size: cover;
+            background-position: center;
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -17,7 +20,8 @@
 			text-align: center;
 		}
 		.container {
-			background-color: white;
+			background-image: url('resources/background3.jpg');
+            background-size: cover;
 			padding: 20px;
 			border-radius: 10px;
 			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -145,13 +149,13 @@
     <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
     <div class="button-container">
         <!-- 返回主页按钮 -->
-        <button onclick="window.location.href='index_login.html'">返回主页</button>
+        <button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
         
         <!-- 刷新按钮 -->
-        <button onclick="window.location.reload();">刷新卡池</button>
+        <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
         
         <!-- 只保留十连抽按钮 -->
-        <button class="btn-yellow" onclick="performDraw()">寻访十次</button>
+        <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
     </div>
 
     <!-- 显示抽卡次数 -->
@@ -163,9 +167,14 @@
     <div id="visit-info"></div>
 </div>
 
-<!-- Background music -->
+<!-- 音乐与音效 -->
 <audio id="bgm" loop>
     <source src="resources/background_music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<audio id="click-sound">
+    <source src="resources/click.mp3" type="audio/mp3">
     Your browser does not support the audio element.
 </audio>
 
@@ -209,6 +218,11 @@ const sixStarChance = 0.008;  // 0.8% 六星概率
 const fiveStarChance = 0.08;  // 8% 五星概率
 const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
 
+function playClickSound() {
+    const clickSound = document.getElementById("click-sound");
+    clickSound.play();
+}
+
 // 抽卡函数
 function performDraw() {
     // 播放背景音乐
@@ -216,10 +230,9 @@ function performDraw() {
     bgm.play();
 
     const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = '';  // 清空上次的结果
 
     if (hasSixStar) {
-        alert("已抽到六星角色，无法继续抽卡！");
+        alert("已抽到六星角色，无法继续抽卡！若想继续体验请刷新卡池");
         return;
     }
 
@@ -232,7 +245,7 @@ function performDraw() {
 
     for (let i = 0; i < cardsToDraw; i++) {
         if (hasSixStar && totalCardsDrawn % 10 === 0 || totalCardsDrawn >= 50) {
-            alert("已抽到六星角色，无法继续抽卡！");
+            alert("已抽到六星角色，无法继续抽卡！若想继续体验请刷新卡池");
             break; // 如果已抽到六星，或者已达最大抽卡数50，停止抽卡
         }
 
@@ -267,7 +280,7 @@ function performDraw() {
             hasSixStar = true;
         }
     }
-
+    resultDiv.innerHTML = '';  // 清空上次的结果
     // 输出抽到的卡
     drawnCards.forEach((character) => {
         const card = document.createElement('div');

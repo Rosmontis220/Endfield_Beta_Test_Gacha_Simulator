@@ -13,7 +13,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
+            background: url('resources/background1.jpg') no-repeat center center fixed; /* 背景图 */
+            background-size: cover; /* 背景图铺满 */
             flex-direction: column;
             text-align: center;
         }
@@ -24,6 +25,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 80%;
             max-width: 600px;
+            background: url('resources/background2.jpg') no-repeat center center; /* 容器内背景 */
+            background-size: cover;
         }
 		img.logo {
             width: 100%; /* 设置 logo 与输入框同宽 */
@@ -93,13 +96,13 @@
         <img src="resources/logo.png" class="logo" alt="Logo">
         <h2>选择卡池</h2>
         <div class="pool-buttons">
-            <button class="black-color" onclick="window.location.href='newbie_pool.html'">新手寻访</button>
-            <button class="red-color" onclick="window.location.href='magma_pool.html'">熔火灼痕</button>
-            <button class="magenta-color" onclick="window.location.href='know_pool.html'">知与行</button>
+            <button class="black-color" onclick="playClickSound(); window.location.href='newbie_pool.html'">新手寻访</button>
+            <button class="red-color" onclick="playClickSound(); window.location.href='magma_pool.html'">熔火灼痕</button>
+            <button class="magenta-color" onclick="playClickSound(); window.location.href='know_pool.html'">知与行</button>
         </div>
 
         <!-- 免责声明按钮 -->
-        <button class="disclaimer-btn" onclick="toggleDisclaimer()">查看免责声明</button>
+        <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看免责声明</button>
 
         <!-- 免责声明内容 -->
         <div class="disclaimer-content" id="disclaimer-content">
@@ -114,7 +117,19 @@
     您的浏览器不支持 audio 元素。
 </audio>
 
+<!-- 点击音效 -->
+<audio id="click-sound" src="resources/click.mp3" preload="auto"></audio>
+
 <script>
+    // 播放点击音效
+    function playClickSound() {
+        var clickSound = document.getElementById("click-sound");
+        clickSound.currentTime = 0; // 确保每次点击时从头播放音效
+        clickSound.play().catch(function(e) {
+            console.error("播放音效失败:", e); // 打印播放失败的错误信息
+        });
+    }
+
     // 监听鼠标移动事件
     window.addEventListener('mousemove', function() {
         var bgm = document.getElementById("bgm");
