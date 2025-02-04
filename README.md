@@ -15,3 +15,7 @@ Now Newbie Pool & Laevatain Pool & Yvonne Pool Updated.
 免责声明：由于本人没有测试资格，规则和卡池名是听说的，所以如果与实际抽卡规则情况不符，我不负任何责任。
 
 作者：星幻_StarRev，小黑盒B站森空岛等平台同名，github与少数其他平台用户名Rosmontis220。
+
+# 更新日志
+
+[查看更新日志](update.md)
