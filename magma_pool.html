@@ -76,12 +76,6 @@
 			border: none;
 			transition: none;  /* 禁用过渡效果 */
 		}
-		/* 移除 hover 和 active 状态的颜色变化 */
-		button:hover,
-		button:active {
-			background-color: #d3d3d3;  /* 保持默认背景色 */
-			transform: none; /* 禁用点击时缩放效果 */
-		}
 		.btn-yellow {
 			background-color: yellow;
 			color: black;
@@ -168,13 +162,12 @@
 
     <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
     <div class="button-container">
-        <!-- 返回主页按钮 -->
         <button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
         
-        <!-- 刷新按钮 -->
         <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
         
-        <!-- 只保留十连抽按钮 -->
+		<button onclick="playClickSound(); PerformOneDraw();">寻访一次</button>
+		
         <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
     </div>
 
@@ -318,7 +311,77 @@ function performDraw() {
             noSixStarCount++;
         }
     }
+    // 输出抽到的卡
+    drawnCards.forEach((character) => {
+        const card = document.createElement('div');
+        card.classList.add('card', character.rarity);
+        card.innerHTML = `
+            <img src="${character.img}" alt="${character.name}">
+            <div class="card-name">${character.name}</div>
+        `;
+        resultDiv.appendChild(card);
+    });
 
+    // 更新当前抽卡次数显示
+    document.getElementById("counter").innerText = `当前抽卡次数: ${totalCardsDrawn}`;
+
+    // 显示角色被抽到的次数
+    displayDrawnStatistics();
+}
+
+function PerformOneDraw() {
+    // 播放背景音乐
+    const bgm = document.getElementById("bgm");
+    bgm.play();
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = '';  // 清空上次的结果
+
+    // 更新抽卡次数
+    let cardsToDraw = 1;
+
+    // 记录当前的抽卡开始编号
+    drawnCards = [];
+    let noFiveOrSixStar = true;
+    let isSixStarDrawn = false; // 标记是否抽到六星
+
+    for (let i = 0; i < cardsToDraw; i++) {
+        totalCardsDrawn++;  // 每抽一次，总抽卡数加1
+
+        // 第120抽必出莱万汀
+        if (totalCardsDrawn === 120) {
+            let character = { name: '莱万汀', img: 'resources/6star4.png', rarity: '6star' }; // 直接出莱万汀
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+            break;
+        }
+        
+        // 如果是第80次抽卡且前79次未出六星，强制出六星
+        if (noSixStarCount === 79) {
+            let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+            isSixStarDrawn = true; // 记录六星已经抽到
+        } else {
+			let character = generateCharacterByProbability(false, false);
+			drawnCards.push(character);
+			characterDrawCounts[drawnCards[i].name]++;
+			if (character.rarity === '5star' || character.rarity === '6star') {
+				noFiveOrSixStar = false;
+			}
+			if (character.rarity === '6star') {
+				isSixStarDrawn = true;
+			}
+        }
+        
+        if (drawnCards[i].rarity === '6star') {
+            noSixStarCount = 0;
+        } else {
+            noSixStarCount++;
+        }
+    }
     // 输出抽到的卡
     drawnCards.forEach((character) => {
         const card = document.createElement('div');
