@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -33,7 +32,8 @@
 		img.logo {
 			margin: 0 auto;
 			display: block;
-			width: 300px;
+			width: 100%;
+			max-width: 300px;
 			margin-bottom: 20px;
 		}
 		.result {
@@ -73,16 +73,15 @@
 		button {
 			padding: 10px 20px;
 			font-size: 16px;
-			border-radius: 5px;
-			cursor: pointer;
 			background-color: #d3d3d3;
 			color: black;
 			border: none;
 			transition: none;  /* 禁用过渡效果 */
 		}
-		.btn-yellow {
-			background-color: yellow;
-			color: black;
+		.btn-draw img{
+			width: 30%;
+			max-width: 100px;
+			height: auto;
 		}
 		#visit-info {
 			margin-top: 20px;
@@ -121,20 +120,40 @@
 		.modal img {
 			width: 100%;
 		}
-    /* 新增的样式: 按钮容器 */
+		.orange-text {
+			color: orange;
+		}
+
+		.gold-text {
+			color: gold;
+		}
+
+		.black-text {
+			color: black;
+		}
+		
+		.magenta-text {
+			color: magenta;
+		}
 		.button-container {
 			display: flex;
-			justify-content: space-between;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 10px;
 			margin-top: 20px;
-			width: 100%;
 		}
 		.button-container button {
 			flex: 1;
 			margin: 5px;
 		}
-		.orange-text {
-			color: orange;
+		@media (min-width: 768px) {
+			.btn-draw {
+				width: 25%; 
+				max-width: 400px; 
+				height: auto; 
+			}
 		}
+	</style>
 	</style>
 
 </head>
@@ -154,14 +173,9 @@
 
     <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
     <div class="button-container">
-        <!-- 返回主页按钮 -->
-        <button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
-        
-        <!-- 刷新按钮 -->
-        <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
-        
-        <!-- 只保留十连抽按钮 -->
-        <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
+        <img src="resources/home.png" alt="返回主页" class="btn-draw" onclick="playClickSound(); window.location.href='index_login.html'">
+		<img src="resources/refresh.png" alt="刷新卡池" class="btn-draw" onclick="playClickSound(); window.location.reload();">
+		<img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
     </div>
 
     <!-- 显示抽卡次数 -->
