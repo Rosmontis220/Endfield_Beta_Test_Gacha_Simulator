@@ -12,7 +12,7 @@ Now Newbie Pool & Laevatain Pool & Yvonne Pool Updated.
 
 体验网址：https://rosmontis220.github.io/Endfield_Beta_Test_Gacha_Simulator/
 
-免责声明：由于本人没有测试资格，规则和卡池名是听说的，所以如果与实际抽卡规则情况不符，我不负任何责任。
+温馨提示：由于本人没有测试资格，规则和卡池名是听说的，无法进行验证，因此模拟结果可能与实际抽卡规则情况不符。
 
 作者：星幻_StarRev，小黑盒B站森空岛等平台同名，github与少数其他平台用户名Rosmontis220。
 
