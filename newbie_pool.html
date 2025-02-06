@@ -78,9 +78,9 @@
 			border: none;
 			transition: none;  /* 禁用过渡效果 */
 		}
-		.btn-draw img{
-			width: 30%;
-			max-width: 100px;
+		.btn-draw {
+			width: 75%;
+			max-width: 400px;
 			height: auto;
 		}
 		#visit-info {
@@ -137,10 +137,14 @@
 		}
 		.button-container {
 			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			gap: 10px;
-			margin-top: 20px;
+			flex-wrap: wrap; 
+			justify-content: center; 
+			align-items: center;
+			gap: 10px; 
+			width: 100%; 
+			max-width: 80vw;
+			margin: 0 auto; 
+			padding: 10px;
 		}
 		.button-container button {
 			flex: 1;
@@ -148,12 +152,11 @@
 		}
 		@media (min-width: 768px) {
 			.btn-draw {
-				width: 25%; 
-				max-width: 400px; 
+				width: 22%; 
+				max-width: 500px; 
 				height: auto; 
 			}
 		}
-	</style>
 	</style>
 
 </head>
