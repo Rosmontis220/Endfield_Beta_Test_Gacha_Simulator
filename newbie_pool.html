@@ -73,16 +73,14 @@
 		button {
 			padding: 10px 20px;
 			font-size: 16px;
-			border-radius: 5px;
-			cursor: pointer;
 			background-color: #d3d3d3;
 			color: black;
 			border: none;
 			transition: none;  /* 禁用过渡效果 */
 		}
-		.btn-yellow {
-			background-color: yellow;
-			color: black;
+		.btn-draw img{
+			height: auto;
+			margin: 10px;
 		}
 		#visit-info {
 			margin-top: 20px;
@@ -160,8 +158,7 @@
         <!-- 刷新按钮 -->
         <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
         
-        <!-- 只保留十连抽按钮 -->
-        <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
+		<img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
     </div>
 
     <!-- 显示抽卡次数 -->

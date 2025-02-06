@@ -73,16 +73,14 @@
 		button {
 			padding: 10px 20px;
 			font-size: 16px;
-			border-radius: 5px;
-			cursor: pointer;
 			background-color: #d3d3d3;
 			color: black;
 			border: none;
-			transition: none;  /* 禁用过渡效果 */
+			transition: none;
 		}
-		.btn-yellow {
-			background-color: yellow;
-			color: black;
+		.btn-draw img{
+			height: auto;
+			margin: 10px;
 		}
 		#visit-info {
 			margin-top: 20px;
@@ -159,20 +157,16 @@
 		<span class="orange-text">莱万汀 </span> 
         <span class="gold-text">艾维文娜 </span> 
         <span class="black-text">UP</span>
-		
 	</p>
 
     <div class="result" id="result"></div>
 
     <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
     <div class="button-container">
-        <button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
-        
-        <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
-        
-		<button onclick="playClickSound(); PerformOneDraw();">寻访一次</button>
-		
-        <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
+		<button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
+		<button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
+		<img src="resources/1draw.png" alt="寻访一次" class="btn-draw" onclick="playClickSound(); PerformOneDraw();">
+        <img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
     </div>
 
     <!-- 显示抽卡次数 -->
