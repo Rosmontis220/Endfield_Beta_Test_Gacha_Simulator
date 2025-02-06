@@ -30,11 +30,13 @@
             width: 90%;
             max-width: 600px;
         }
-        img.logo {
-            width: 100%;
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
+		img.logo {
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 300px;
+			margin-bottom: 20px;
+		}
         button {
             padding: 12px 20px;
             font-size: 16px;
@@ -43,8 +45,9 @@
             margin-top: 20px;
             background-color: #d3d3d3;
             color: black;
-            border: none;
-            width: 100%;
+			border: none;
+			margin: 0 auto;
+			display: block;
         }
         button:hover {
             background-color: #bbb;
@@ -90,8 +93,12 @@
             border-radius: 20px;
             padding: 12px 24px;
             font-size: 16px;
+			width: 80%;
+			max-width: 240px;
+			margin: 0 auto;
             margin-top: 20px;
-            width: 100%;
+			display: block;
+			border: none;
         }
         .input-field {
             padding: 12px 20px;
@@ -171,7 +178,6 @@
     <div class="main-content">
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <div id="welcome-message" class="welcome-message"></div>
-        <h2>选择卡池</h2>
         <div class="pool-buttons">
             <img src="resources/pool1.png" alt="特惠寻访" class="pool-button" onclick="playClickSound(); window.location.href='newbie_pool.html'">
             <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">

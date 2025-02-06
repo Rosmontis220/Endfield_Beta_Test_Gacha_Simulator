@@ -7,42 +7,47 @@
 	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
         body {
-            font-family: 'Microsoft YaHei', sans-serif;  /* 黑体 */
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            background-image: url('resources/background1.jpg');
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: url('resources/background1.jpg') no-repeat center center fixed; /* 背景图 */
-            background-size: cover; /* 背景图铺满 */
+            min-height: 100vh;
+			overflow: auto;
             flex-direction: column;
             text-align: center;
         }
         .container {
-            background-color: white;
+            background-image: url('resources/background2.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 90%;
             max-width: 600px;
-            background: url('resources/background2.jpg') no-repeat center center; /* 容器内背景 */
-            background-size: cover;
         }
 		img.logo {
-            width: 100%; /* 设置 logo 与输入框同宽 */
-            max-width: 300px; /* 限制最大宽度 */
-            margin-bottom: 20px;
-        }
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 300px;
+			margin-bottom: 20px;
+		}
         button {
             padding: 12px 20px;
             font-size: 16px;
             border-radius: 20px;
             cursor: pointer;
             margin-top: 20px;
-            background-color: #d3d3d3;  /* 灰白色 */
+            background-color: #d3d3d3;
             color: black;
             border: none;
-            width: 100%;
+			margin: 0 auto;
+			display: block;
         }
         button:hover {
             background-color: #bbb;
@@ -64,7 +69,7 @@
             margin-top: 30px;
             font-size: 14px;
             color: white;
-            background-color: #007BFF; /* 蓝色按钮 */
+            background-color: #007BFF;
             padding: 12px 24px;
             border-radius: 20px;
             cursor: pointer;
@@ -97,7 +102,6 @@
     <!-- 主内容（卡池选择） -->
     <div class="main-content">
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
-        <h2>选择卡池</h2>
         <div class="pool-buttons">
             <img src="resources/pool1.png" alt="特惠寻访" class="pool-button" onclick="playClickSound(); window.location.href='newbie_pool.html'">
             <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">
