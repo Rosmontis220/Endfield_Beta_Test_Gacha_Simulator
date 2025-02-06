@@ -108,11 +108,14 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .pool-buttons button {
-            font-size: 14px;
-            padding: 8px 16px;
+        .pool-buttons img {
+            width: 100%;
+			max-width: 300px; 
+			height: auto;
+			margin: 10px;
+			cursor: pointer;
         }
-		/* 加载动画样式 */
+		
 	.loading-container {
 		text-align: center;
 		margin-top: 20px;
@@ -169,9 +172,9 @@
         <div id="welcome-message" class="welcome-message"></div>
         <h2>选择卡池</h2>
         <div class="pool-buttons">
-            <button class="black-color" onclick="playClickSound(); window.location.href='newbie_pool.html'">新手寻访</button>
-            <button class="red-color" onclick="playClickSound(); window.location.href='magma_pool.html'">熔火灼痕</button>
-            <button class="magenta-color" onclick="playClickSound(); window.location.href='know_pool.html'">知与行</button>
+            <img src="resources/pool1.png" alt="特惠寻访" class="pool-button" onclick="playClickSound(); window.location.href='newbie_pool.html'">
+            <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">
+            <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
 
         <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看免责声明</button>

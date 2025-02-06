@@ -82,9 +82,12 @@
         .main-content {
             display: block;
         }
-        .pool-buttons button {
-            font-size: 14px;  /* 调整卡池按钮字体为较小 */
-            padding: 8px 16px;
+        .pool-buttons img {
+            width: 100%;
+			max-width: 300px; 
+			height: auto;
+			margin: 10px;
+			cursor: pointer;
         }
     </style>
 </head>
@@ -96,9 +99,9 @@
         <img src="resources/logo.png" class="logo" alt="Logo">
         <h2>选择卡池</h2>
         <div class="pool-buttons">
-            <button class="black-color" onclick="playClickSound(); window.location.href='newbie_pool.html'">新手寻访</button>
-            <button class="red-color" onclick="playClickSound(); window.location.href='magma_pool.html'">熔火灼痕</button>
-            <button class="magenta-color" onclick="playClickSound(); window.location.href='know_pool.html'">知与行</button>
+            <img src="resources/pool1.png" alt="特惠寻访" class="pool-button" onclick="playClickSound(); window.location.href='newbie_pool.html'">
+            <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">
+            <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
 
         <!-- 免责声明按钮 -->

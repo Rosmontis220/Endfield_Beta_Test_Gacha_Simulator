@@ -29,6 +29,8 @@
 			max-width: 1600px;
 		}
 		img.logo {
+			margin: 0 auto;
+			display: block;
 			width: 300px;
 			margin-bottom: 20px;
 		}
@@ -149,8 +151,8 @@
 <body>
 
 <div class="container">
-    <img src="resources/logo.png" class="logo" alt="Logo">
-    <h2 class='magenta-text'>知与行</h2>
+    <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
+    <img src="resources/name3.png" class="logo" alt="知与行">
     <p>
 		<span class="orange-text">伊冯 </span> 
         <span class="gold-text">弧光 </span> 
@@ -162,13 +164,12 @@
 
     <!-- 按钮容器，放在抽卡结果的下方，抽数的上方 -->
     <div class="button-container">
-        <!-- 返回主页按钮 -->
         <button onclick="playClickSound(); window.location.href='index_login.html'">返回主页</button>
         
-        <!-- 刷新按钮 -->
         <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
         
-        <!-- 只保留十连抽按钮 -->
+		<button onclick="playClickSound(); PerformOneDraw();">寻访一次</button>
+		
         <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
     </div>
 
@@ -272,46 +273,45 @@ function performDraw() {
             drawnCards.push(character);
             characterDrawCounts[drawnCards[i].name]++;
             noSixStarCount = 0;
-            break;
-        }
-        
+        } else{
         // 如果是第80次抽卡且前79次未出六星，强制出六星
-        if (noSixStarCount === 79) {
-            let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
-            drawnCards.push(character);
-            characterDrawCounts[drawnCards[i].name]++;
-            noSixStarCount = 0;
-            isSixStarDrawn = true; // 记录六星已经抽到
-        } else {
-			// 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
-			if (i === 9 && noFiveOrSixStar) {
-				let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+			if (noSixStarCount === 79) {
+				let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
 				drawnCards.push(character);
 				characterDrawCounts[drawnCards[i].name]++;
+				noSixStarCount = 0;
+				isSixStarDrawn = true; // 记录六星已经抽到
 			} else {
-				let character = generateCharacterByProbability(false, false);
-				drawnCards.push(character);
-				characterDrawCounts[drawnCards[i].name]++;
-				if (character.rarity === '5star' || character.rarity === '6star') {
-					noFiveOrSixStar = false;
-				}
-				if (character.rarity === '6star') {
-					isSixStarDrawn = true;
+				// 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
+				if (i === 9 && noFiveOrSixStar) {
+					let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+				} else {
+					let character = generateCharacterByProbability(false, false);
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+					if (character.rarity === '5star' || character.rarity === '6star') {
+						noFiveOrSixStar = false;
+					}
+					if (character.rarity === '6star') {
+						isSixStarDrawn = true;
+					}
 				}
 			}
-        }
+		
+			// 如果已抽到六星且是十连最后一抽时，不再中断
+			if (isSixStarDrawn && i === 9) {
+				break;
+			}
         
-        // 如果已抽到六星且是十连最后一抽时，不再中断
-        if (isSixStarDrawn && i === 9) {
-            break;
-        }
-        
-        if (drawnCards[i].rarity === '6star') {
-            noSixStarCount = 0;
-        } else {
-            noSixStarCount++;
-        }
-    }
+			if (drawnCards[i].rarity === '6star') {
+				noSixStarCount = 0;
+			} else {
+				noSixStarCount++;
+			}
+		}
+	}
 
     // 输出抽到的卡
     drawnCards.forEach((character) => {
