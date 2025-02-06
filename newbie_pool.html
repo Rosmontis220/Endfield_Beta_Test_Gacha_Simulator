@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -32,8 +33,7 @@
 		img.logo {
 			margin: 0 auto;
 			display: block;
-			width: 100%;
-			max-width: 300px;
+			width: 300px;
 			margin-bottom: 20px;
 		}
 		.result {
@@ -73,14 +73,16 @@
 		button {
 			padding: 10px 20px;
 			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
 			background-color: #d3d3d3;
 			color: black;
 			border: none;
 			transition: none;  /* 禁用过渡效果 */
 		}
-		.btn-draw img{
-			height: auto;
-			margin: 10px;
+		.btn-yellow {
+			background-color: yellow;
+			color: black;
 		}
 		#visit-info {
 			margin-top: 20px;
@@ -158,7 +160,8 @@
         <!-- 刷新按钮 -->
         <button onclick="playClickSound(); window.location.reload();">刷新卡池</button>
         
-		<img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
+        <!-- 只保留十连抽按钮 -->
+        <button class="btn-yellow" onclick="playClickSound(); performDraw()">寻访十次</button>
     </div>
 
     <!-- 显示抽卡次数 -->
