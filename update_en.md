@@ -29,3 +29,5 @@
 1.5.2 2025.02.06 Replaced buttons with in-game buttons and game-like buttons
 
 1.5.3 2025.02.06 Optimized page layout and moved buttons to the top
+
+1.6.0 2025.02.07 Added character voice, click avatar and listen.
