@@ -204,24 +204,24 @@
 <script>
 // 角色池（头像和名字，所有图片位于 resources 文件夹）
 const MagmaPool = [
-    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star' },
-    { name: '黎风', img: 'resources/6star2.png', rarity: '6star' },
-    { name: '余烬', img: 'resources/6star3.png', rarity: '6star' },
-	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star' },
-    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star' },
-	{ name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
-	{ name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
-    { name: '弧光', img: 'resources/5star2.png', rarity: '5star' },
-    { name: '大潘', img: 'resources/5star3.png', rarity: '5star' },
-    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star' },
-    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star' },
-    { name: '赛希', img: 'resources/4star2.png', rarity: '4star' },
-    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star' },
-    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star' }
+    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star', audio: 'resources/6star1.mp3' },
+    { name: '黎风', img: 'resources/6star2.png', rarity: '6star', audio: 'resources/6star2.mp3' },
+    { name: '余烬', img: 'resources/6star3.png', rarity: '6star', audio: 'resources/6star3.mp3' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
+    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3' },
+    { name: '大潘', img: 'resources/5star3.png', rarity: '5star', audio: 'resources/5star3.mp3' },
+    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star', audio: 'resources/5star4.mp3' },
+    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star', audio: 'resources/4star1.mp3' },
+    { name: '赛希', img: 'resources/4star2.png', rarity: '4star', audio: 'resources/4star2.mp3' },
+    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star', audio: 'resources/4star3.mp3' },
+    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star', audio: 'resources/4star4.mp3' }
 ];
 
 let totalCardsDrawn = 0; // 总抽卡次数
@@ -250,6 +250,8 @@ const sixStarChance = 0.008;  // 0.8% 六星概率
 const fiveStarChance = 0.08;  // 8% 五星概率
 const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
 
+let currentAudio = null;
+
 function playClickSound() {
     const clickSound = document.getElementById("click-sound");
     clickSound.play();
@@ -275,9 +277,9 @@ function performDraw() {
     for (let i = 0; i < cardsToDraw; i++) {
         totalCardsDrawn++;  // 每抽一次，总抽卡数加1
 
-        // 第120抽必出伊冯
+        // 第120抽必出莱万汀
         if (totalCardsDrawn === 120) {
-            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star' }; // 直接出伊冯
+            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' }; 
             drawnCards.push(character);
             characterDrawCounts[drawnCards[i].name]++;
             noSixStarCount = 0;
@@ -320,13 +322,12 @@ function performDraw() {
 			}
 		}
 	}
-
     // 输出抽到的卡
     drawnCards.forEach((character) => {
         const card = document.createElement('div');
         card.classList.add('card', character.rarity);
         card.innerHTML = `
-            <img src="${character.img}" alt="${character.name}">
+            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
             <div class="card-name">${character.name}</div>
         `;
         resultDiv.appendChild(card);
@@ -360,7 +361,7 @@ function PerformOneDraw() {
 
         // 第120抽必出莱万汀
         if (totalCardsDrawn === 120) {
-            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star' }; // 直接出伊冯
+            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' }; 
             drawnCards.push(character);
             characterDrawCounts[drawnCards[i].name]++;
             noSixStarCount = 0;
@@ -397,7 +398,7 @@ function PerformOneDraw() {
         const card = document.createElement('div');
         card.classList.add('card', character.rarity);
         card.innerHTML = `
-            <img src="${character.img}" alt="${character.name}">
+            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
             <div class="card-name">${character.name}</div>
         `;
         resultDiv.appendChild(card);
@@ -450,6 +451,17 @@ function displayDrawnStatistics() {
         }
         statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
     }
+}
+
+function playCharacterVoice(audioFile) {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    // 创建并播放新的音频
+    currentAudio = new Audio(audioFile);
+    currentAudio.play();
 }
 </script>
 </body>
