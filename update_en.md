@@ -31,3 +31,7 @@
 1.5.3 2025.02.06 Optimized page layout and moved buttons to the top
 
 1.6.0 2025.02.07 Added character voice, click avatar and listen.
+
+1.6.1 2025.02.08 Optimized page layout for certain small-screen devices.
+
+1.7.0 2025.02.09 Added Endfield cursor (limited mobile support).
