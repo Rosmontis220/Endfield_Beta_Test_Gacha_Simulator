@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新手教程 - 终末地抽卡模拟</title>
+	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
+    <style>
+		body {
+			cursor: url('resources/cursor.png'), auto;
+			background-image: url('resources/background1.jpg');
+            background-size: cover;
+            background-position: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+            min-height: 100vh;
+			overflow: auto;
+			margin: 0;
+			background-color: #f4f4f4;
+			flex-direction: column;
+			text-align: center;
+		}
+		.container {
+			background-image: url('resources/background3.jpg');
+            background-size: cover;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			width: 90%;
+			max-width: 1600px;
+		}
+		img.logo {
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 300px;
+			margin-bottom: 20px;
+		}
+		.result {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 20px;
+		}
+		.card {
+			width: 128px;
+			height: 128px;
+			overflow: hidden;
+			background-color: #fafafa;
+			text-align: center;
+			padding-top: 10px;
+		}
+		.card img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.card-name {
+			font-size: 15px;
+			margin-top: 0px;
+			color: black; 
+		}
+		.card.6star .card-name {
+			color: orange;
+		}
+		.card.5star .card-name {
+			color: gold;
+		}
+		.card.4star .card-name {
+			color: purple; 
+		}
+		button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: #d3d3d3;
+			color: black;
+			border: none;
+			transition: none;  /* 禁用过渡效果 */
+		}
+		.btn-draw {
+			width: 75%;
+			max-width: 400px;
+			height: auto;
+		}
+		#visit-info {
+			margin-top: 20px;
+			font-size: 14px;
+			color: #555;
+		}
+		#counter {
+			margin-top: 20px;
+			font-size: 16px;
+			color: #333;
+		}
+		#drawn-statistics {
+			margin-top: 20px;
+			font-size: 16px;
+			color: #333;
+			text-align: left;
+		}
+		.modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			display: none;
+			justify-content: center;
+			align-items: center;
+		}
+		.modal-content {
+			background: white;
+			padding: 20px;
+			border-radius: 10px;
+			width: 300px;
+			text-align: center;
+		}
+		.modal img {
+			width: 100%;
+		}
+		.orange-text {
+			color: orange;
+		}
+
+		.gold-text {
+			color: gold;
+		}
+
+		.black-text {
+			color: black;
+		}
+		
+		.magenta-text {
+			color: magenta;
+		}
+		.button-container {
+			display: flex;
+			flex-wrap: wrap; 
+			justify-content: center; 
+			align-items: center;
+			gap: 10px; 
+			width: 100%; 
+			max-width: 80vw;
+			margin: 0 auto; 
+			padding: 10px;
+		}
+		.button-container button {
+			flex: 1;
+			margin: 5px;
+		}
+		@media (min-width: 768px) {
+			.btn-draw {
+				width: 22%; 
+				max-width: 500px; 
+				height: auto; 
+			}
+		}
+	</style>
+
+</head>
+<body>
+<div id="tutorial-modal" class="modal" style="display: flex;">
+    <div class="modal-content" style="width: 80%; max-width: 600px; padding: 40px;">
+        <img src="resources/logo.png" class="logo" alt="明日方舟终末地" style="width: 100%; max-width: 400px;">
+        <h1 style="font-size: 2em; margin: 20px 0;">管理员，准备好了吗？</h1>
+		<h3>本教程会带你快速了解该模拟器的使用方法</h3>
+        <button onclick="startTutorial(); playbgm(); playClickSound(); playReadySound()" style="padding: 15px 30px; font-size: 1.2em; background-color: black; color: white; border: none; border-radius: 30px; cursor: url('resources/cursor.png'), auto;">我准备好了。</button>
+    </div>
+</div>
+
+<div class="container">
+    <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
+    <img src="resources/name2.png" class="logo" alt="熔火灼痕">
+    <p>
+		<span class="orange-text">莱万汀 </span> 
+        <span class="gold-text">艾维文娜 </span> 
+        <span class="black-text">UP</span>
+	</p>
+	<div id="tutorial-tasks" style="display: none;">
+		<h2>任务列表</h2>
+		<ul>
+			<li id="task1">1.点击寻访一次按钮抽取一抽</li>
+			<li id="task2" style="display: none;">2.点击寻访十次按钮抽取十抽</li>
+			<li id="task3" style="display: none;">3.点击任意角色头像收听语音</li>
+			<li id="task4" style="display: none;">4.点击刷新卡池重置卡池数据</li>
+			<li id="task5" style="display: none;">5.点击返回主页回到卡池选择</li>
+			<li id="task6" style="display: none;">6.教程完成，返回主页开抽吧</li>
+		</ul>
+	</div>
+    <div class="button-container">
+        <img src="resources/home.png" alt="返回主页" class="btn-draw" onclick="playClickSound(); ">
+		<img src="resources/refresh.png" alt="刷新卡池" class="btn-draw" onclick="playClickSound(); ">
+		<img src="resources/1draw.png" alt="寻访一次" class="btn-draw" onclick="playClickSound(); PerformOneDraw();">
+        <img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <!-- 显示抽卡次数 -->
+    <div id="counter">当前抽卡次数: 0</div>
+
+    <!-- 显示角色被抽到的次数 -->
+    <div id="drawn-statistics"></div>
+
+    <div id="visit-info"></div>
+</div>
+
+<!-- 音乐与音效 -->
+<audio id="bgm" loop>
+    <source src="resources/tutorial.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<audio id="click-sound">
+    <source src="resources/click.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<audio id="ready-sound">
+    <source src="resources/endmin_f_ready.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+<script>
+// 教程状态
+let tutorialStep = 1;
+
+// 开始教程
+function startTutorial() {
+    document.getElementById('tutorial-modal').style.display = 'none';
+    document.getElementById('tutorial-tasks').style.display = 'block';
+    document.getElementById('task1').style.display = 'block';
+}
+
+// 检查任务完成情况
+function checkTaskCompletion() {
+    if (tutorialStep === 1 && document.getElementById('task1').style.color === 'green') {
+        document.getElementById('task2').style.display = 'block';
+        tutorialStep = 2;
+    } else if (tutorialStep === 2 && document.getElementById('task2').style.color === 'green') {
+        document.getElementById('task3').style.display = 'block';
+        tutorialStep = 3;
+    } else if (tutorialStep === 3 && document.getElementById('task3').style.color === 'green') {
+        document.getElementById('task4').style.display = 'block';
+        tutorialStep = 4;
+    } else if (tutorialStep === 4 && document.getElementById('task4').style.color === 'green') {
+        document.getElementById('task5').style.display = 'block';
+        tutorialStep = 5;
+	} else if (tutorialStep === 5 && document.getElementById('task5').style.color === 'green') {
+        document.getElementById('task6').style.display = 'block';
+        tutorialStep = 6;
+	}
+}
+function playbgm(){
+	const bgm = document.getElementById("bgm");
+    bgm.play();
+}
+// 角色池（头像和名字，所有图片位于 resources 文件夹）
+const MagmaPool = [
+    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star', audio: 'resources/6star1.mp3' },
+    { name: '黎风', img: 'resources/6star2.png', rarity: '6star', audio: 'resources/6star2.mp3' },
+    { name: '余烬', img: 'resources/6star3.png', rarity: '6star', audio: 'resources/6star3.mp3' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
+    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
+    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3' },
+    { name: '大潘', img: 'resources/5star3.png', rarity: '5star', audio: 'resources/5star3.mp3' },
+    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star', audio: 'resources/5star4.mp3' },
+    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star', audio: 'resources/4star1.mp3' },
+    { name: '赛希', img: 'resources/4star2.png', rarity: '4star', audio: 'resources/4star2.mp3' },
+    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star', audio: 'resources/4star3.mp3' },
+    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star', audio: 'resources/4star4.mp3' }
+];
+
+let totalCardsDrawn = 0; // 总抽卡次数
+let drawnCards = [];  // 用于记录当前抽到的卡
+let noSixStarCount = 0; // 未抽到六星次数
+
+// 角色被抽到的统计
+let characterDrawCounts = {
+    '洁尔佩塔': 0,
+    '黎风': 0,
+    '余烬': 0,
+	'莱万汀': 0,
+	'伊冯': 0,
+    '艾维文娜': 0,
+    '弧光': 0,
+    '大潘': 0,
+    '佩丽卡': 0,
+    '昼雪': 0,
+    '赛希': 0,
+    '陈千语': 0,
+    '狼卫': 0
+};
+
+// 六星、五星和四星的概率
+const sixStarChance = 0.008;  // 0.8% 六星概率
+const fiveStarChance = 0.08;  // 8% 五星概率
+const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
+
+let currentAudio = null;
+
+function playClickSound() {
+    const clickSound = document.getElementById("click-sound");
+    clickSound.play();
+}
+function playReadySound() {
+    const readySound = document.getElementById("ready-sound");
+    readySound.play();
+}
+// 抽卡函数
+function performDraw() {
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = '';  // 清空上次的结果
+
+    // 更新抽卡次数
+    let cardsToDraw = 10;  // 十连抽为10次
+
+    // 记录当前的抽卡开始编号
+    drawnCards = [];
+    let noFiveOrSixStar = true;
+    let isSixStarDrawn = false; // 标记是否抽到六星
+
+    for (let i = 0; i < cardsToDraw; i++) {
+        totalCardsDrawn++;  // 每抽一次，总抽卡数加1
+
+        // 第120抽必出莱万汀
+        if (totalCardsDrawn === 120) {
+            let character = { name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' }; 
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+        } else{
+        // 如果是第80次抽卡且前79次未出六星，强制出六星
+			if (noSixStarCount === 79) {
+				let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
+				drawnCards.push(character);
+				characterDrawCounts[drawnCards[i].name]++;
+				noSixStarCount = 0;
+				isSixStarDrawn = true; // 记录六星已经抽到
+			} else {
+				// 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
+				if (i === 9 && noFiveOrSixStar) {
+					let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+				} else {
+					let character = generateCharacterByProbability(false, false);
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+					if (character.rarity === '5star' || character.rarity === '6star') {
+						noFiveOrSixStar = false;
+					}
+					if (character.rarity === '6star') {
+						isSixStarDrawn = true;
+					}
+				}
+			}
+		
+			// 如果已抽到六星且是十连最后一抽时，不再中断
+			if (isSixStarDrawn && i === 9) {
+				break;
+			}
+        
+			if (drawnCards[i].rarity === '6star') {
+				noSixStarCount = 0;
+			} else {
+				noSixStarCount++;
+			}
+		}
+	}
+    // 输出抽到的卡
+    drawnCards.forEach((character) => {
+        const card = document.createElement('div');
+        card.classList.add('card', character.rarity);
+        card.innerHTML = `
+            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
+            <div class="card-name">${character.name}</div>
+        `;
+        resultDiv.appendChild(card);
+    });
+
+    // 更新当前抽卡次数显示
+    document.getElementById("counter").innerText = `当前抽卡次数: ${totalCardsDrawn}`;
+
+    // 完成任务2
+    if (tutorialStep === 2) {
+        document.getElementById('task2').style.color = 'green';
+        checkTaskCompletion();
+    }
+}
+
+function PerformOneDraw() {
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = '';  // 清空上次的结果
+
+    // 更新抽卡次数
+    let cardsToDraw = 1;
+
+    // 记录当前的抽卡开始编号
+    drawnCards = [];
+    let noFiveOrSixStar = true;
+    let isSixStarDrawn = false; // 标记是否抽到六星
+
+    for (let i = 0; i < cardsToDraw; i++) {
+        totalCardsDrawn++;  // 每抽一次，总抽卡数加1
+
+        // 第120抽必出莱万汀
+        if (totalCardsDrawn === 120) {
+            let character = { name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star1.mp3' }; 
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+            break;
+        }
+        
+        // 如果是第80次抽卡且前79次未出六星，强制出六星
+        if (noSixStarCount === 79) {
+            let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+            isSixStarDrawn = true; // 记录六星已经抽到
+        } else {
+			let character = generateCharacterByProbability(false, false);
+			drawnCards.push(character);
+			characterDrawCounts[drawnCards[i].name]++;
+			if (character.rarity === '5star' || character.rarity === '6star') {
+				noFiveOrSixStar = false;
+			}
+			if (character.rarity === '6star') {
+				isSixStarDrawn = true;
+			}
+        }
+        
+        if (drawnCards[i].rarity === '6star') {
+            noSixStarCount = 0;
+        } else {
+            noSixStarCount++;
+        }
+    }
+    // 输出抽到的卡
+    drawnCards.forEach((character) => {
+        const card = document.createElement('div');
+        card.classList.add('card', character.rarity);
+        card.innerHTML = `
+            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
+            <div class="card-name">${character.name}</div>
+        `;
+        resultDiv.appendChild(card);
+    });
+
+    // 更新当前抽卡次数显示
+    document.getElementById("counter").innerText = `当前抽卡次数: ${totalCardsDrawn}`;
+
+    // 完成任务1
+    if (tutorialStep === 1) {
+        document.getElementById('task1').style.color = 'green';
+        checkTaskCompletion();
+    }
+}
+
+// 生成角色数据
+function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false) {
+    let roll = Math.random();
+	if (noSixStarCount < 65) {
+		if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
+			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
+		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
+			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
+		} else {
+			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+		}
+	} else {
+		let NewChance = (noSixStarCount - 65) * 0.05;
+		if (forceSixStar || (roll < sixStarChance + NewChance && !forceFiveStar)) {
+			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
+		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance + NewChance && !forceSixStar)) {
+			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
+		} else {
+			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+		}
+	}
+}
+
+// 更新角色被抽到的次数
+function displayDrawnStatistics() {
+    const statsDiv = document.getElementById('drawn-statistics');
+    statsDiv.innerHTML = '';
+    for (let character in characterDrawCounts) {
+        const count = characterDrawCounts[character];
+        let rarityClass = '';
+        switch (MagmaPool.find(c => c.name === character).rarity) {
+            case '6star':
+                rarityClass = 'orange'; break;
+            case '5star':
+                rarityClass = 'gold'; break;
+            case '4star':
+                rarityClass = 'purple'; break;
+        }
+        statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
+    }
+}
+
+function playCharacterVoice(audioFile) {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    // 创建并播放新的音频
+    currentAudio = new Audio(audioFile);
+    currentAudio.play();
+
+    // 完成任务3
+    if (tutorialStep === 3) {
+        document.getElementById('task3').style.color = 'green';
+        checkTaskCompletion();
+    }
+}
+document.querySelector('img[alt="返回主页"]').onclick = function() {
+    playClickSound();
+    if (tutorialStep === 5) {
+        document.getElementById('task5').style.color = 'green';
+        checkTaskCompletion();
+    } else {
+        window.location.href = 'index_login.html';
+    }
+};
+document.querySelector('img[alt="刷新卡池"]').onclick = function() {
+    playClickSound();
+    if (tutorialStep === 4) {
+        document.getElementById('task4').style.color = 'green';
+        checkTaskCompletion();
+    } else {
+        window.location.reload();
+    }
+};
+</script>
+</body>
+</html>
