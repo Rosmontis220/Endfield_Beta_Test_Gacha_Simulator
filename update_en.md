@@ -35,3 +35,5 @@
 1.6.1 2025.02.08 Optimized page layout for certain small-screen devices.
 
 1.7.0 2025.02.09 Added Endfield cursor (limited mobile support).
+
+1.7.1 2025.02.09 Fixed the bug where the 5star possibility is wrong in Yvonne's pool.(Thanks to the feedback of 白-棱, a bilibili user)
