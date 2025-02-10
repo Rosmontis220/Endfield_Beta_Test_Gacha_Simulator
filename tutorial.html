@@ -166,7 +166,7 @@
     <div class="modal-content" style="width: 80%; max-width: 600px; padding: 40px;">
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地" style="width: 100%; max-width: 400px;">
         <h1 style="font-size: 2em; margin: 20px 0;">管理员，准备好了吗？</h1>
-		<h3>本教程会带你快速了解该模拟器的使用方法</h3>
+		<h3>本新手教程会带你快速了解该模拟器的使用方法</h3>
         <button onclick="startTutorial(); playbgm(); playClickSound(); playReadySound()" style="padding: 15px 30px; font-size: 1.2em; background-color: black; color: white; border: none; border-radius: 30px; cursor: url('resources/cursor.png'), auto;">我准备好了。</button>
     </div>
 </div>
@@ -219,13 +219,26 @@
     Your browser does not support the audio element.
 </audio>
 
-<audio id="ready-sound">
-    <source src="resources/endmin_f_ready.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
-</audio>
+<audio id="ready-sound"></audio>
+
 <script>
+
 // 教程状态
 let tutorialStep = 1;
+const gender = localStorage.getItem('gender') || 'female'; // 默认为 female
+
+// 根据 gender 设置 ready-sound 的音频源
+const readySound = document.getElementById('ready-sound');
+if (gender === 'male') {
+    readySound.innerHTML = '<source src="resources/endmin_m_ready.mp3" type="audio/mp3">';
+} else {
+    readySound.innerHTML = '<source src="resources/endmin_f_ready.mp3" type="audio/mp3">';
+}
+
+// 播放 ready-sound
+function playReadySound() {
+    readySound.play();
+}
 
 // 开始教程
 function startTutorial() {
@@ -250,6 +263,7 @@ function checkTaskCompletion() {
         tutorialStep = 5;
 	} else if (tutorialStep === 5 && document.getElementById('task5').style.color === 'green') {
         document.getElementById('task6').style.display = 'block';
+		localStorage.setItem('hasCompletedTutorial', 'true');
         tutorialStep = 6;
 	}
 }
@@ -311,10 +325,7 @@ function playClickSound() {
     const clickSound = document.getElementById("click-sound");
     clickSound.play();
 }
-function playReadySound() {
-    const readySound = document.getElementById("ready-sound");
-    readySound.play();
-}
+
 // 抽卡函数
 function performDraw() {
     const resultDiv = document.getElementById("result");
@@ -531,7 +542,7 @@ document.querySelector('img[alt="返回主页"]').onclick = function() {
         document.getElementById('task5').style.color = 'green';
         checkTaskCompletion();
     } else {
-        window.location.href = 'index_login.html';
+        window.location.href = 'index.html';
     }
 };
 document.querySelector('img[alt="刷新卡池"]').onclick = function() {

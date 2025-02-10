@@ -118,7 +118,7 @@
             margin-bottom: 20px;
         }
         .pool-buttons img {
-            width: 100%;
+            width: 70%;
 			max-width: 300px; 
 			height: auto;
 			margin: 10px;
@@ -152,47 +152,124 @@
 		color: yellow;
 		font-weight: bold;
 	}
-    </style>
+	.gender-selection, .name-selection {
+		text-align: center;
+	}
+
+	.gender-btn {
+		padding: 12px 20px;
+		font-size: 16px;
+		cursor: url('resources/cursor.png'), auto;
+		margin-top: 20px;
+		background-color: black;
+		color: white;
+		border: none;
+		border-radius: 0;
+		width: 80%;
+		max-width: 240px;
+		display: none;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.confirm-btn {
+		padding: 12px 20px;
+		font-size: 16px;
+		cursor: url('resources/cursor.png'), auto;
+		margin-top: 20px;
+		background-color: black;
+		color: white;
+		border: none;
+		border-radius: 0; /* 方形按钮 */
+		width: 80%;
+		max-width: 240px;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.gender-btn:hover, .confirm-btn:hover {
+		background-color: black;
+	}
+	    .click-to-continue {
+            font-size: 20px;
+            color: black;
+            margin-top: 20px;
+            display: none; /* 初始隐藏 */
+        }
+        .logout-btn {
+            margin-top: 20px;
+            font-size: 14px;
+            color: white;
+            background-color: red;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: url('resources/cursor.png'), auto;
+            border: none;
+        }
+        .logout-btn:hover {
+            background-color: red;
+        }
+		@media (min-width: 768px) {
+			.pool-buttons img {
+				width: 40%;
+				max-width: 300px; 
+				height: auto;
+				margin: 10px;
+				cursor: url('resources/cursor.png'), auto;
+			}
+		}
+	</style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 登录界面 -->
-    <div class="login-container">
+    <!-- 加载界面 -->
+    <div class="loading-container">
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
-        <h1>Welcome to Talos-II</h1>
-        <input type="text" id="username" class="input-field" placeholder="请输入用户名" />
-        <input type="password" id="password" class="input-field" placeholder="请输入密码" />
-        <button class="login-btn" onclick="playClickSound(); login()">登录系统</button>
+        <div class="loading-text">0%</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
+        <h3 class="click-to-continue">▶点击任意区域继续</h3>
     </div>
-    
-	<!-- 新增加载动画 -->
-	<div class="loading-container" style="display: none;">
-		<img src="resources/logo.png" class="logo" alt="明日方舟终末地">
-		<div class="loading-text">0%</div>
-		<div class="progress-bar-container">
-			<div class="progress-bar"></div>
-		</div>
-	</div>
-	
+
+    <!-- 性别选择界面 -->
+    <div class="gender-selection" style="display: none;">
+        <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
+        <h1 id="who-are-you">你是谁</h1>
+        <h3>请确认身份</h3>
+        <button class="gender-btn" onclick="playClickSound(); selectGender('male')">管理员（男）</button>
+        <button class="gender-btn" onclick="playClickSound(); selectGender('female')">管理员（女）</button>
+    </div>
+
+    <!-- 命名界面 -->
+    <div class="name-selection" style="display: none;">
+        <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
+        <h1>你是</h1>
+        <h3>......</h3>
+        <input type="text" id="username" class="input-field" placeholder="Endministrator" />
+        <button class="confirm-btn" onclick="playClickSound(); confirmName()">确认</button>
+    </div>
+
     <!-- 主内容（卡池选择） -->
-    <div class="main-content">
+    <div class="main-content" style="display: none;">
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <div id="welcome-message" class="welcome-message"></div>
         <div class="pool-buttons">
-			<img src="resources/poolt.png" alt="新手教程" class="pool-button" onclick="playClickSound(); window.location.href='tutorial.html'">
+            <img src="resources/poolt.png" alt="新手教程" class="pool-button" onclick="playClickSound(); window.location.href='tutorial.html'">
             <img src="resources/pool1.png" alt="特惠寻访" class="pool-button" onclick="playClickSound(); window.location.href='newbie_pool.html'">
             <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">
             <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
 
-        <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看免责声明</button>
+        <button class="logout-btn" onclick="logout()">注销账号</button>
+        <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看程序说明</button>
 
         <div class="disclaimer-content" id="disclaimer-content">
             <p>本抽卡模拟器内所有角色、头像、概率及相关内容均来自鹰角网络的游戏《明日方舟终末地》，并非官方模拟器，仅为娱乐用途，不代表任何实际游戏中的抽卡结果，用户应理解本模拟器并不会影响或模拟现实游戏中的抽卡系统。由于我没有测试资格，所有内容均基于我认为的终末地的抽卡机制，因此如有理解错误等因素导致本模拟器模拟结果不正确，我不负任何责任。作者：星幻_StarRev，B站小黑盒森空岛等平台同名，github与其他极少数平台用户名：Rosmontis220。</p>
         </div>
     </div>
 </div>
+
 
 <!-- 音效 -->
 <audio id="click-sound" src="resources/click.mp3" preload="auto"></audio>
@@ -202,97 +279,141 @@
 </audio>
 
 <script>
-    window.onload = function() {
-        var storedUsername = localStorage.getItem('username');
-        var storedPassword = localStorage.getItem('password');
-        
-        if (storedUsername) {
-            document.getElementById('username').value = storedUsername;
+window.onload = function() {
+    animateProgressBar();
+};
+
+function animateProgressBar() {
+    var progressBar = document.querySelector('.progress-bar');
+    var loadingText = document.querySelector('.loading-text');
+    var targetPercentages = [10, 30, 60, 100];
+    var currentStep = 0;
+
+    function animateProgress(start, end, duration, delay) {
+        var startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var progress = (timestamp - startTime) / duration;
+            if (progress > 1) progress = 1;
+
+            var currentValue = Math.floor(start + (end - start) * progress);
+            progressBar.style.width = currentValue + '%';
+            loadingText.innerHTML = currentValue + '%';
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                currentStep++;
+                if (currentStep < targetPercentages.length) {
+                    setTimeout(function() {
+                        animateProgress(targetPercentages[currentStep - 1], targetPercentages[currentStep], 700, 500);
+                    }, 500);
+                } else {
+                    // 加载完成后显示“点击任意区域继续”
+                    document.querySelector('.click-to-continue').style.display = 'block';
+                    // 监听鼠标左键点击
+                    document.addEventListener('click', handleClick);
+                }
+            }
         }
-        if (storedPassword) {
-            document.getElementById('password').value = storedPassword;
-        }
-    };
 
-    window.addEventListener('mousemove', function() {
-        var bgm = document.getElementById("bgm");
-        if (bgm.paused) {
-            bgm.play();
-        }
-    });
+        requestAnimationFrame(step);
+    }
+    animateProgress(0, targetPercentages[currentStep], 1000, 500);
+}
 
-    function login() {
-		var username = document.getElementById("username").value.trim();
-		if (!username) {
-			username = "Endministrator"; // 若用户名为空，设定为 "Endministrator"
-		}
+function handleClick() {
+    // 移除点击事件监听
+    document.removeEventListener('click', handleClick);
+	var bgm = document.getElementById("bgm");
+    if (bgm.paused) {
+        bgm.play();
+    }
+    var storedGender = localStorage.getItem('gender');
+    var storedUsername = localStorage.getItem('username');
+    var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
 
-		// 显示加载动画
-		document.querySelector('.login-container').style.display = 'none';
-		document.querySelector('.loading-container').style.display = 'block';
-
-		var progressBar = document.querySelector('.progress-bar');
-		var loadingText = document.querySelector('.loading-text');
-    
-		var targetPercentages = [10, 30, 60, 100]; // 目标百分比
-		var currentStep = 0;
-
-		function animateProgress(start, end, duration, delay) {
-			var startTime = null;
-			
-			function step(timestamp) {
-				if (!startTime) startTime = timestamp;
-				var progress = (timestamp - startTime) / duration;
-				if (progress > 1) progress = 1;
-
-				var currentValue = Math.floor(start + (end - start) * progress);
-				progressBar.style.width = currentValue + '%';
-				loadingText.innerHTML = currentValue + '%';
-
-				if (progress < 1) {
-					requestAnimationFrame(step);
-				} else {
-					currentStep++;
-					// 停顿0.5秒后进入下一个阶段
-					if (currentStep < targetPercentages.length) {
-						setTimeout(function() {
-							animateProgress(targetPercentages[currentStep - 1], targetPercentages[currentStep], 700, 500);
-						}, 500); // 停顿0.5秒
-					} else {
-						setTimeout(function() {
-							// 隐藏加载动画，显示卡池选择界面
-							document.querySelector('.loading-container').style.display = 'none';
-							document.querySelector('.main-content').style.display = 'block';
-							document.getElementById("welcome-message").innerHTML = `Welcome, ${username}`;
-						}, 500); // 停顿后进入卡池选择界面
-					}
-				}
-			}
-	
-			requestAnimationFrame(step);
-		}
-	
-		// 启动进度条动画
-		animateProgress(0, targetPercentages[currentStep], 1000, 500);
+    // 如果本地已有用户名、性别且通过教程，则直接跳转到卡池选择界面
+    if (storedUsername && storedGender && hasCompletedTutorial === 'true') {
+        document.querySelector('.loading-container').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'block';
+        document.getElementById('welcome-message').innerHTML = `Welcome, ${storedUsername}`;
+    } else {
+	    // 隐藏加载界面，显示性别选择界面
+		document.querySelector('.loading-container').style.display = 'none';
+		document.querySelector('.gender-selection').style.display = 'block';
+		animateText();
 	}
+}
+function animateText() {
+    var textElement = document.getElementById('who-are-you');
+    var texts = ["你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谂？", "你昴谐？", "佧昿谑？", "佭晀谒？", "佲晁谓？", "佳晁谁？", "佰是谁？", "你是谁？"];
+    var interval = 150; // 每个文本显示的时间间隔（毫秒）
+    var index = 0;
 
-
-
-    function toggleDisclaimer() {
-        var content = document.getElementById('disclaimer-content');
-        if (content.style.display === 'none' || content.style.display === '') {
-            content.style.display = 'block';
+    function changeText() {
+        if (index < texts.length) {
+            textElement.textContent = texts[index];
+            index++;
+            setTimeout(changeText, interval);
         } else {
-            content.style.display = 'none';
+            // 文本变化完成后显示所有性别选择按钮
+			var genderButtons = document.querySelectorAll('.gender-btn');
+            genderButtons.forEach(function(button) {
+                button.style.display = 'block';
+            });
         }
     }
 
-    function playClickSound() {
-        var clickSound = document.getElementById("click-sound");
-        clickSound.currentTime = 0; // 确保每次点击时从头播放音效
-        clickSound.play();
-    }
-</script>
+    changeText();
+}
+function selectGender(gender) {
+    localStorage.setItem('gender', gender);
+    document.querySelector('.gender-selection').style.display = 'none';
+    document.querySelector('.name-selection').style.display = 'block';
+}
 
+function confirmName() {
+    var username = document.getElementById('username').value.trim();
+    if (!username) {
+        username = 'Endministrator';
+    }
+    localStorage.setItem('username', username);
+    var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
+    if (hasCompletedTutorial === 'true') {
+        // 如果已经参与过教程，进入卡池选择界面
+        document.querySelector('.name-selection').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'block';
+        document.getElementById('welcome-message').innerHTML = `Welcome, ${username}`;
+    } else {
+        // 如果没有参与过教程，跳转到教程页面
+        window.location.href = 'tutorial.html';
+    }
+}
+
+function toggleDisclaimer() {
+    var content = document.getElementById('disclaimer-content');
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+    } else {
+        content.style.display = 'none';
+    }
+}
+
+function logout() {
+    // 清除用户名和性别信息
+    localStorage.removeItem('username');
+    localStorage.removeItem('gender');
+    // 刷新页面
+    window.location.reload();
+}
+
+function playClickSound() {
+    var clickSound = document.getElementById('click-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+</script>
 </body>
 </html>
