@@ -39,3 +39,5 @@
 1.7.1 2025.02.09 Fixed the bug where the 5star possibility is wrong in Yvonne's pool.(Thanks to the feedback of 白-棱, a bilibili user)
 
 1.8.0 2025.02.09 Added tutorial.
+
+1.8.1 and further Awaiting to be translated.
