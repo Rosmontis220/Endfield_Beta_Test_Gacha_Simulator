@@ -208,6 +208,10 @@
     <div id="visit-info"></div>
 </div>
 
+<div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
+    管理员已进入任务待命位置
+</div>
+
 <!-- 音乐与音效 -->
 <audio id="bgm" loop>
     <source src="resources/tutorial.mp3" type="audio/mp3">
@@ -222,7 +226,15 @@
 <audio id="ready-sound"></audio>
 
 <script>
-
+window.onload = function() {
+    var uid = localStorage.getItem('uid');
+    var uidDisplay = document.getElementById('uid-display');
+    if (uid) {
+        uidDisplay.innerHTML = `同人模拟器，不代表官方机制 UID: ${uid}`;
+    } else {
+        uidDisplay.innerHTML = '管理员已进入任务待命位置';
+    }
+};
 // 教程状态
 let tutorialStep = 1;
 const gender = localStorage.getItem('gender') || 'female'; // 默认为 female

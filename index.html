@@ -73,7 +73,7 @@
             border: none;
         }
         .disclaimer-btn:hover {
-            background-color: #0056b3;
+            background-color: #007BFF;
         }
         .disclaimer-content {
             display: none;
@@ -208,6 +208,39 @@
         .logout-btn:hover {
             background-color: red;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+        .modal h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            flex: 1;
+            margin: 0 10px;
+        }
 		@media (min-width: 768px) {
 			.pool-buttons img {
 				width: 40%;
@@ -229,7 +262,7 @@
         <div class="progress-bar-container">
             <div class="progress-bar"></div>
         </div>
-        <h3 class="click-to-continue">▶点击任意区域继续</h3>
+        <h3 class="click-to-continue">▶点击任意处继续</h3>
     </div>
 
     <!-- 性别选择界面 -->
@@ -237,8 +270,8 @@
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <h1 id="who-are-you">你是谁</h1>
         <h3>请确认身份</h3>
-        <button class="gender-btn" onclick="playClickSound(); selectGender('male')">管理员（男）</button>
-        <button class="gender-btn" onclick="playClickSound(); selectGender('female')">管理员（女）</button>
+        <button class="gender-btn" onclick="playClickSound(); showGenderConfirmation('male')">管理员（男）</button>
+        <button class="gender-btn" onclick="playClickSound(); showGenderConfirmation('female')">管理员（女）</button>
     </div>
 
     <!-- 命名界面 -->
@@ -247,7 +280,8 @@
         <h1>你是</h1>
         <h3>......</h3>
         <input type="text" id="username" class="input-field" placeholder="Endministrator" />
-        <button class="confirm-btn" onclick="playClickSound(); confirmName()">确认</button>
+        <h4>*你的名字不能超过8个汉字（16个字符）*</h4>
+        <button class="confirm-btn" onclick="playClickSound(); showNameConfirmation()">确认</button>
     </div>
 
     <!-- 主内容（卡池选择） -->
@@ -261,7 +295,7 @@
             <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
 
-        <button class="logout-btn" onclick="logout()">注销账号</button>
+        <button class="logout-btn" onclick="playClickSound(); showLogoutConfirmation()">注销账号</button>
         <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看程序说明</button>
 
         <div class="disclaimer-content" id="disclaimer-content">
@@ -270,6 +304,40 @@
     </div>
 </div>
 
+<!-- 模态框 -->
+<div id="gender-confirmation-modal" class="modal">
+    <div class="modal-content">
+        <h1>是否确认身份？</h1>
+        <div class="modal-buttons">
+            <button class="confirm-btn" onclick="playClickSound(); hideModal('gender-confirmation-modal')">×</button>
+            <button class="confirm-btn" onclick="playClickSound(); confirmGender()">√</button>
+        </div>
+    </div>
+</div>
+
+<div id="name-confirmation-modal" class="modal">
+    <div class="modal-content">
+        <h1>确认这是你的名字吗？</h1>
+        <div class="modal-buttons">
+            <button class="confirm-btn" onclick="playClickSound(); hideModal('name-confirmation-modal')">重新输入</button>
+            <button class="confirm-btn" onclick="playClickSound(); confirmName()">确认</button>
+        </div>
+    </div>
+</div>
+
+<div id="logout-confirmation-modal" class="modal">
+    <div class="modal-content">
+        <h1>确认永远离开塔卫二吗？</h1>
+        <div class="modal-buttons">
+            <button class="confirm-btn" onclick="playClickSound(); hideModal('logout-confirmation-modal')">再考虑考虑</button>
+            <button class="confirm-btn" onclick="playClickSound(); logout()">确认</button>
+        </div>
+    </div>
+</div>
+
+<div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
+    管理员已进入任务待命位置
+</div>
 
 <!-- 音效 -->
 <audio id="click-sound" src="resources/click.mp3" preload="auto"></audio>
@@ -281,8 +349,31 @@
 <script>
 window.onload = function() {
     animateProgressBar();
-};
 
+    var uid = localStorage.getItem('uid');
+    var uidDisplay = document.getElementById('uid-display');
+    if (uid) {
+        uidDisplay.innerHTML = `同人模拟器，不代表官方机制 UID: ${uid}`;
+    } else {
+        uidDisplay.innerHTML = '管理员已进入任务待命位置';
+    }
+};
+    // 新增函数：显示模态框
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    // 新增函数：隐藏模态框
+    function hideModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // 新增函数：显示性别确认模态框
+    function showGenderConfirmation(gender) {
+        window.selectedGender = gender; // 临时存储选择的性别
+        showModal('gender-confirmation-modal');
+    }
+	
 function animateProgressBar() {
     var progressBar = document.querySelector('.progress-bar');
     var loadingText = document.querySelector('.loading-text');
@@ -307,8 +398,8 @@ function animateProgressBar() {
                 currentStep++;
                 if (currentStep < targetPercentages.length) {
                     setTimeout(function() {
-                        animateProgress(targetPercentages[currentStep - 1], targetPercentages[currentStep], 700, 500);
-                    }, 500);
+                        animateProgress(targetPercentages[currentStep - 1], targetPercentages[currentStep], 700, 250);
+                    }, 250);
                 } else {
                     // 加载完成后显示“点击任意区域继续”
                     document.querySelector('.click-to-continue').style.display = 'block';
@@ -320,7 +411,7 @@ function animateProgressBar() {
 
         requestAnimationFrame(step);
     }
-    animateProgress(0, targetPercentages[currentStep], 1000, 500);
+    animateProgress(0, targetPercentages[currentStep], 1000, 250);
 }
 
 function handleClick() {
@@ -330,6 +421,7 @@ function handleClick() {
     if (bgm.paused) {
         bgm.play();
     }
+	playClickSound();
     var storedGender = localStorage.getItem('gender');
     var storedUsername = localStorage.getItem('username');
     var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
@@ -339,6 +431,11 @@ function handleClick() {
         document.querySelector('.loading-container').style.display = 'none';
         document.querySelector('.main-content').style.display = 'block';
         document.getElementById('welcome-message').innerHTML = `Welcome, ${storedUsername}`;
+		// 切换背景音乐到 index_bgm2.mp3
+        var bgm = document.getElementById('bgm');
+        bgm.pause(); // 停止当前音乐
+        bgm.src = 'resources/index_bgm2.mp3'; // 切换音乐文件
+        bgm.play(); // 播放新音乐
     } else {
 	    // 隐藏加载界面，显示性别选择界面
 		document.querySelector('.loading-container').style.display = 'none';
@@ -348,8 +445,8 @@ function handleClick() {
 }
 function animateText() {
     var textElement = document.getElementById('who-are-you');
-    var texts = ["你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谂？", "你昴谐？", "佧昿谑？", "佭晀谒？", "佲晁谓？", "佳晁谁？", "佰是谁？", "你是谁？"];
-    var interval = 150; // 每个文本显示的时间间隔（毫秒）
+    var texts = ["你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谂？", "你昴谐？", "　", "　", "佧昿谑？", "佳時谇？", "佭晀谒？", "佲晁谓？", "佳晁谁？", "佰是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？"];
+    var interval = 100; // 每个文本显示的时间间隔（毫秒）
     var index = 0;
 
     function changeText() {
@@ -380,19 +477,62 @@ function confirmName() {
         username = 'Endministrator';
     }
     localStorage.setItem('username', username);
+
+    // 生成并存储UID
+    var uid = generateUID();
+    localStorage.setItem('uid', uid);
+
+    // 更新UID显示
+    document.getElementById('uid-display').innerHTML = `同人模拟器，不代表官方机制 UID: ${uid}`;
+	hideModal('name-confirmation-modal')
     var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
     if (hasCompletedTutorial === 'true') {
         // 如果已经参与过教程，进入卡池选择界面
         document.querySelector('.name-selection').style.display = 'none';
         document.querySelector('.main-content').style.display = 'block';
         document.getElementById('welcome-message').innerHTML = `Welcome, ${username}`;
+
+        // 切换背景音乐到 index_bgm2.mp3
+        var bgm = document.getElementById('bgm');
+        bgm.pause(); // 停止当前音乐
+        bgm.src = 'resources/index_bgm2.mp3'; // 切换音乐文件
+        bgm.play(); // 播放新音乐
     } else {
         // 如果没有参与过教程，跳转到教程页面
         window.location.href = 'tutorial.html';
     }
 }
 
+    // 新增函数：确认性别
+    function confirmGender() {
+        localStorage.setItem('gender', window.selectedGender);
+        hideModal('gender-confirmation-modal');
+        document.querySelector('.gender-selection').style.display = 'none';
+        document.querySelector('.name-selection').style.display = 'block';
+    }
+
+    // 新增函数：显示用户名确认模态框
+    function showNameConfirmation() {
+        var username = document.getElementById('username').value.trim();
+        if (!username) {
+            username = 'Endministrator';
+        }
+        window.tempUsername = username; // 临时存储输入的用户名
+        showModal('name-confirmation-modal');
+    }
+
+    // 新增函数：显示注销确认模态框
+    function showLogoutConfirmation() {
+        showModal('logout-confirmation-modal');
+    }
+	
+function generateUID() {
+    // 生成一个9位数的随机UID
+    return Math.floor(100000000 + Math.random() * 900000000);
+}
+
 function toggleDisclaimer() {
+	playClickSound();
     var content = document.getElementById('disclaimer-content');
     if (content.style.display === 'none' || content.style.display === '') {
         content.style.display = 'block';
@@ -402,9 +542,11 @@ function toggleDisclaimer() {
 }
 
 function logout() {
-    // 清除用户名和性别信息
+    playClickSound();
+    // 清除用户名、性别和UID信息
     localStorage.removeItem('username');
     localStorage.removeItem('gender');
+    localStorage.removeItem('uid');
     // 刷新页面
     window.location.reload();
 }

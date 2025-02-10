@@ -191,6 +191,10 @@
     <div id="visit-info"></div>
 </div>
 
+<div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
+    管理员已进入任务待命位置
+</div>
+
 <!-- 音乐与音效 -->
 <audio id="bgm" loop>
     <source src="resources/background_music.mp3" type="audio/mp3">
@@ -203,6 +207,15 @@
 </audio>
 
 <script>
+window.onload = function() {
+    var uid = localStorage.getItem('uid');
+    var uidDisplay = document.getElementById('uid-display');
+    if (uid) {
+        uidDisplay.innerHTML = `同人模拟器，不代表官方机制 UID: ${uid}`;
+    } else {
+        uidDisplay.innerHTML = '管理员已进入任务待命位置';
+    }
+};
 // 角色池（头像和名字，所有图片位于 resources 文件夹）
 const MagmaPool = [
     { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star', audio: 'resources/6star1.mp3' },
