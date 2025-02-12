@@ -270,8 +270,8 @@
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <h1 id="who-are-you">你是谁</h1>
         <h3>请确认身份</h3>
-        <button class="gender-btn" onclick="playClickSound(); showGenderConfirmation('male')">管理员（男）</button>
-        <button class="gender-btn" onclick="playClickSound(); showGenderConfirmation('female')">管理员（女）</button>
+        <button class="gender-btn" onclick="playClick2Sound(); showGenderConfirmation('male')">管理员（男）</button>
+        <button class="gender-btn" onclick="playClick2Sound(); showGenderConfirmation('female')">管理员（女）</button>
     </div>
 
     <!-- 命名界面 -->
@@ -279,9 +279,9 @@
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <h1>你是</h1>
         <h3>......</h3>
-        <input type="text" id="username" class="input-field" placeholder="Endministrator" />
+        <input type="text" id="username" class="input-field" placeholder="管理员" />
         <h4>*你的名字不能超过8个汉字（16个字符）*</h4>
-        <button class="confirm-btn" onclick="playClickSound(); showNameConfirmation()">确认</button>
+        <button class="confirm-btn" onclick="playClick2Sound(); showNameConfirmation()">确认</button>
     </div>
 
     <!-- 主内容（卡池选择） -->
@@ -295,8 +295,8 @@
             <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
 
-        <button class="logout-btn" onclick="playClickSound(); showLogoutConfirmation()">注销账号</button>
-        <button class="disclaimer-btn" onclick="playClickSound(); toggleDisclaimer()">查看程序说明</button>
+        <button class="logout-btn" onclick="playLogoutSound(); showLogoutConfirmation()">注销账号</button>
+        <button class="disclaimer-btn" onclick="playIndiSound(); toggleDisclaimer()">查看程序说明</button>
 
         <div class="disclaimer-content" id="disclaimer-content">
             <p>本抽卡模拟器内所有角色、头像、概率及相关内容均来自鹰角网络的游戏《明日方舟终末地》，并非官方模拟器，仅为娱乐用途，不代表任何实际游戏中的抽卡结果，用户应理解本模拟器并不会影响或模拟现实游戏中的抽卡系统。由于我没有测试资格，所有内容均基于我认为的终末地的抽卡机制，因此如有理解错误等因素导致本模拟器模拟结果不正确，我不负任何责任。作者：星幻_StarRev，B站小黑盒森空岛等平台同名，github与其他极少数平台用户名：Rosmontis220。</p>
@@ -309,8 +309,8 @@
     <div class="modal-content">
         <h1>是否确认身份？</h1>
         <div class="modal-buttons">
-            <button class="confirm-btn" onclick="playClickSound(); hideModal('gender-confirmation-modal')">×</button>
-            <button class="confirm-btn" onclick="playClickSound(); confirmGender()">√</button>
+            <button class="confirm-btn" onclick="playNoSound(); hideModal('gender-confirmation-modal')">×</button>
+            <button class="confirm-btn" onclick="playYesSound(); confirmGender()">√</button>
         </div>
     </div>
 </div>
@@ -319,18 +319,18 @@
     <div class="modal-content">
         <h1>确认这是你的名字吗？</h1>
         <div class="modal-buttons">
-            <button class="confirm-btn" onclick="playClickSound(); hideModal('name-confirmation-modal')">重新输入</button>
-            <button class="confirm-btn" onclick="playClickSound(); confirmName()">确认</button>
+            <button class="confirm-btn" onclick="playNoSound(); hideModal('name-confirmation-modal')">重新输入</button>
+            <button class="confirm-btn" onclick="playYesSound(); confirmName()">确认</button>
         </div>
     </div>
 </div>
 
 <div id="logout-confirmation-modal" class="modal">
     <div class="modal-content">
-        <h1>确认永远离开塔卫二吗？</h1>
+        <h1>确认注销账号吗？</h1>
         <div class="modal-buttons">
-            <button class="confirm-btn" onclick="playClickSound(); hideModal('logout-confirmation-modal')">再考虑考虑</button>
-            <button class="confirm-btn" onclick="playClickSound(); logout()">确认</button>
+            <button class="confirm-btn" onclick="playNoSound(); hideModal('logout-confirmation-modal')">再考虑考虑</button>
+            <button class="confirm-btn" onclick="playYesSound(); logout()">确认</button>
         </div>
     </div>
 </div>
@@ -341,6 +341,12 @@
 
 <!-- 音效 -->
 <audio id="click-sound" src="resources/click.mp3" preload="auto"></audio>
+<audio id="enter-sound" src="resources/enter.mp3" preload="auto"></audio>
+<audio id="no-sound" src="resources/no.mp3" preload="auto"></audio>
+<audio id="yes-sound" src="resources/yes.mp3" preload="auto"></audio>
+<audio id="logout-sound" src="resources/logout.mp3" preload="auto"></audio>
+<audio id="indi-sound" src="resources/indi.mp3" preload="auto"></audio>
+<audio id="click2-sound" src="resources/click2.mp3" preload="auto"></audio>
 <audio id="bgm" loop>
     <source src="resources/index_bgm.mp3" type="audio/mp3">
     您的浏览器不支持 audio 元素。
@@ -348,8 +354,6 @@
 
 <script>
 window.onload = function() {
-    animateProgressBar();
-
     var uid = localStorage.getItem('uid');
     var uidDisplay = document.getElementById('uid-display');
     if (uid) {
@@ -357,6 +361,12 @@ window.onload = function() {
     } else {
         uidDisplay.innerHTML = '管理员已进入任务待命位置';
     }
+	var storedGender = localStorage.getItem('gender');
+	if (storedGender){
+		animate100ProgressBar();
+	} else {
+		animateProgressBar();
+	}
 };
     // 新增函数：显示模态框
     function showModal(modalId) {
@@ -414,6 +424,46 @@ function animateProgressBar() {
     animateProgress(0, targetPercentages[currentStep], 1000, 250);
 }
 
+function animate100ProgressBar() {
+    var progressBar = document.querySelector('.progress-bar');
+    var loadingText = document.querySelector('.loading-text');
+    var targetPercentages = [60, 100];
+    var currentStep = 0;
+
+    function animateProgress(start, end, duration, delay) {
+        var startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var progress = (timestamp - startTime) / duration;
+            if (progress > 1) progress = 1;
+
+            var currentValue = Math.floor(start + (end - start) * progress);
+            progressBar.style.width = currentValue + '%';
+            loadingText.innerHTML = currentValue + '%';
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                currentStep++;
+                if (currentStep < targetPercentages.length) {
+                    setTimeout(function() {
+                        animateProgress(targetPercentages[currentStep - 1], targetPercentages[currentStep], 700, 250);
+                    }, 250);
+                } else {
+                    // 加载完成后显示“点击任意区域继续”
+                    document.querySelector('.click-to-continue').style.display = 'block';
+                    // 监听鼠标左键点击
+                    document.addEventListener('click', handleClick);
+                }
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+    animateProgress(0, targetPercentages[currentStep], 1000, 250);
+}
+
 function handleClick() {
     // 移除点击事件监听
     document.removeEventListener('click', handleClick);
@@ -421,31 +471,36 @@ function handleClick() {
     if (bgm.paused) {
         bgm.play();
     }
-	playClickSound();
+	playEnterSound();
     var storedGender = localStorage.getItem('gender');
     var storedUsername = localStorage.getItem('username');
     var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
 
-    // 如果本地已有用户名、性别且通过教程，则直接跳转到卡池选择界面
     if (storedUsername && storedGender && hasCompletedTutorial === 'true') {
         document.querySelector('.loading-container').style.display = 'none';
         document.querySelector('.main-content').style.display = 'block';
-        document.getElementById('welcome-message').innerHTML = `Welcome, ${storedUsername}`;
+        document.getElementById('welcome-message').innerHTML = `欢迎回到塔卫二, ${storedUsername}`;
 		// 切换背景音乐到 index_bgm2.mp3
         var bgm = document.getElementById('bgm');
         bgm.pause(); // 停止当前音乐
         bgm.src = 'resources/index_bgm2.mp3'; // 切换音乐文件
         bgm.play(); // 播放新音乐
+    } else if (storedGender && hasCompletedTutorial === 'true') {
+        // 教程完成但未命名，显示命名界面
+        document.querySelector('.loading-container').style.display = 'none';
+        document.querySelector('.name-selection').style.display = 'block';
+    } else if (storedGender && hasCompletedTutorial === "false") {
+        // 已选性别但未完成教程，跳转教程
+        window.location.href = 'tutorial.html';
     } else {
-	    // 隐藏加载界面，显示性别选择界面
 		document.querySelector('.loading-container').style.display = 'none';
 		document.querySelector('.gender-selection').style.display = 'block';
 		animateText();
-	}
+    }
 }
 function animateText() {
     var textElement = document.getElementById('who-are-you');
-    var texts = ["你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谂？", "你昴谐？", "　", "　", "佧昿谑？", "佳時谇？", "佭晀谒？", "佲晁谓？", "佳晁谁？", "佰是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？"];
+    var texts = ["你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谂？", "你昴谐？", "佧昿谑？", "佳時谇？", "佭晀谒？", "佲晁谓？", "佳晁谁？", "佰是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？", "你是谁？"];
     var interval = 100; // 每个文本显示的时间间隔（毫秒）
     var index = 0;
 
@@ -474,7 +529,7 @@ function selectGender(gender) {
 function confirmName() {
     var username = document.getElementById('username').value.trim();
     if (!username) {
-        username = 'Endministrator';
+        username = '管理员';
     }
     localStorage.setItem('username', username);
 
@@ -490,7 +545,7 @@ function confirmName() {
         // 如果已经参与过教程，进入卡池选择界面
         document.querySelector('.name-selection').style.display = 'none';
         document.querySelector('.main-content').style.display = 'block';
-        document.getElementById('welcome-message').innerHTML = `Welcome, ${username}`;
+        document.getElementById('welcome-message').innerHTML = `欢迎回到塔卫二, ${username}`;
 
         // 切换背景音乐到 index_bgm2.mp3
         var bgm = document.getElementById('bgm');
@@ -498,24 +553,28 @@ function confirmName() {
         bgm.src = 'resources/index_bgm2.mp3'; // 切换音乐文件
         bgm.play(); // 播放新音乐
     } else {
-        // 如果没有参与过教程，跳转到教程页面
-        window.location.href = 'tutorial.html';
-    }
+		window.location.href = 'tutorial.html';
+	}
 }
 
     // 新增函数：确认性别
-    function confirmGender() {
-        localStorage.setItem('gender', window.selectedGender);
-        hideModal('gender-confirmation-modal');
-        document.querySelector('.gender-selection').style.display = 'none';
-        document.querySelector('.name-selection').style.display = 'block';
-    }
+function confirmGender() {
+    localStorage.setItem('gender', window.selectedGender);
+    hideModal('gender-confirmation-modal');
+    document.querySelector('.gender-selection').style.display = 'none';
+	var hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
+    if (hasCompletedTutorial === 'true') {
+		document.querySelector('.name-selection').style.display = 'block';
+    } else {
+		window.location.href = 'tutorial.html'; // 跳转到教程页面
+	}
+}
 
     // 新增函数：显示用户名确认模态框
     function showNameConfirmation() {
         var username = document.getElementById('username').value.trim();
         if (!username) {
-            username = 'Endministrator';
+            username = '管理员';
         }
         window.tempUsername = username; // 临时存储输入的用户名
         showModal('name-confirmation-modal');
@@ -532,7 +591,7 @@ function generateUID() {
 }
 
 function toggleDisclaimer() {
-	playClickSound();
+	playIndiSound();
     var content = document.getElementById('disclaimer-content');
     if (content.style.display === 'none' || content.style.display === '') {
         content.style.display = 'block';
@@ -542,7 +601,7 @@ function toggleDisclaimer() {
 }
 
 function logout() {
-    playClickSound();
+    playLogoutSound();
     // 清除用户名、性别和UID信息
     localStorage.removeItem('username');
     localStorage.removeItem('gender');
@@ -553,6 +612,42 @@ function logout() {
 
 function playClickSound() {
     var clickSound = document.getElementById('click-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playNoSound() {
+    var clickSound = document.getElementById('no-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playYesSound() {
+    var clickSound = document.getElementById('yes-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playIndiSound() {
+    var clickSound = document.getElementById('indi-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playClick2Sound() {
+    var clickSound = document.getElementById('click2-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playEnterSound() {
+    var clickSound = document.getElementById('enter-sound');
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+function playLogoutSound() {
+    var clickSound = document.getElementById('logout-sound');
     clickSound.currentTime = 0;
     clickSound.play();
 }
