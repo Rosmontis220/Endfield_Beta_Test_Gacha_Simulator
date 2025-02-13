@@ -6,7 +6,14 @@
     <title>主页 - 终末地抽卡模拟</title>
     <link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
-        body {
+@font-face {
+    font-family: 'Noto Sans Hans';
+    src: url('resources/NotoSansHans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+		body {
+			font-family: 'Noto Sans Hans', sans-serif;
 			cursor: url('resources/cursor.png'), auto;
             font-family: 'Microsoft YaHei', sans-serif;
             margin: 0;
@@ -36,6 +43,13 @@
 			display: block;
 			width: 100%;
 			max-width: 300px;
+			margin-bottom: 20px;
+		}
+		img.loadinglogo {
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 600px;
 			margin-bottom: 20px;
 		}
         button {
@@ -241,6 +255,32 @@
             flex: 1;
             margin: 0 10px;
         }
+.random-tip {
+    color: #444; /* 深灰色 */
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.gender-images {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 图片之间的间距 */
+    margin-top: 20px;
+}
+
+.gender-img {
+	width: 40%;
+    max-width: 500px; /* 图片宽度 */
+    height: auto; /* 保持图片比例 */
+    cursor: url('resources/cursor.png'), auto;
+    transition: transform 0.2s ease, opacity 0.2s ease; /* 悬停动画 */
+}
+
+.gender-img:hover {
+    transform: scale(1.05); /* 悬停时放大 */
+    opacity: 0.9; /* 悬停时透明度 */
+}
 		@media (min-width: 768px) {
 			.pool-buttons img {
 				width: 40%;
@@ -250,6 +290,18 @@
 				cursor: url('resources/cursor.png'), auto;
 			}
 		}
+@media (max-width: 768px) {
+    .gender-images {
+        flex-direction: column; /* 改为垂直排列 */
+        align-items: center; /* 居中对齐 */
+        gap: 10px; /* 缩小间距 */
+    }
+
+    .gender-img {
+        width: 80%; /* 缩小图片宽度以适应移动端 */
+		max-width: 500px;
+    }
+}
 	</style>
 </head>
 <body>
@@ -257,8 +309,9 @@
 <div class="container">
     <!-- 加载界面 -->
     <div class="loading-container">
-        <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
-        <div class="loading-text">0%</div>
+        <img src="resources/logo.png" class="loadinglogo" alt="明日方舟终末地">
+		<h4 id="random-tip" class="random-tip"></h4>
+        <div class="loading-text" style="display: none;">0%</div>
         <div class="progress-bar-container">
             <div class="progress-bar"></div>
         </div>
@@ -270,8 +323,10 @@
         <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
         <h1 id="who-are-you">你是谁</h1>
         <h3>请确认身份</h3>
-        <button class="gender-btn" onclick="playClick2Sound(); showGenderConfirmation('male')">管理员（男）</button>
-        <button class="gender-btn" onclick="playClick2Sound(); showGenderConfirmation('female')">管理员（女）</button>
+        <div class="gender-images">
+        <img src="resources/endmin_f.png" alt="管理员（女）" class="gender-img" onclick="playClick2Sound(); showGenderConfirmation('female')">
+        <img src="resources/endmin_m.png" alt="管理员（男）" class="gender-img" onclick="playClick2Sound(); showGenderConfirmation('male')">
+		</div>
     </div>
 
     <!-- 命名界面 -->
@@ -361,6 +416,15 @@ window.onload = function() {
     } else {
         uidDisplay.innerHTML = '管理员已进入任务待命位置';
     }
+	var tips = [
+        "小型化、模块化、自动化是集成工业系统的核心优势。",
+        "铁誓军是致力于从天使威胁中守护人类的军事组织。",
+        "塔卫二是气态巨行星“塔罗斯”的天然卫星之一。",
+        "终末地工业是一家致力于开拓与建设的独立企业机构。",
+		"“深度”是一种标示超域影响程度的通用测量指标。"
+    ];
+    var randomTip = tips[Math.floor(Math.random() * tips.length)];
+    document.getElementById('random-tip').textContent = randomTip;
 	var storedGender = localStorage.getItem('gender');
 	if (storedGender){
 		animate100ProgressBar();

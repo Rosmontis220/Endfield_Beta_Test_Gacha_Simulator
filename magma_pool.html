@@ -6,7 +6,14 @@
     <title>熔火灼痕 - 终末地抽卡模拟</title>
 	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
     <style>
+@font-face {
+    font-family: 'Noto Sans Hans';
+    src: url('resources/NotoSansHans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 		body {
+			font-family: 'Noto Sans Hans', sans-serif;
 			cursor: url('resources/cursor.png'), auto;
 			background-image: url('resources/background1.jpg');
             background-size: cover;
@@ -100,27 +107,75 @@
 			color: #333;
 			text-align: left;
 		}
-		.modal {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			display: none;
-			justify-content: center;
-			align-items: center;
-		}
-		.modal-content {
-			background: white;
-			padding: 20px;
-			border-radius: 10px;
-			width: 300px;
-			text-align: center;
-		}
-		.modal img {
-			width: 100%;
-		}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+}
+
+.modal-content h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content h3 {
+    text-align: center;
+}
+
+.modal-content img {
+    width: 80%;
+    max-width: 2000px;
+    margin-bottom: 20px;
+}
+
+.modal-content audio {
+    margin-top: 5px;
+}
+.close-modal-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: #808080; /* 灰色背景 */
+    color: white; /* 白色字体 */
+    border: none;
+    border-radius: 50%; /* 圆形 */
+    font-size: 24px;
+    cursor: url('resources/cursor.png'), auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content h1 .orange {
+    color: orange; /* 六星橙色 */
+}
+
+.modal-content h1 .gold {
+    color: gold; /* 五星金色 */
+}
+
+.modal-content h1 .purple {
+    color: purple; /* 四星紫色 */
+}
 		.orange-text {
 			color: orange;
 		}
@@ -188,6 +243,25 @@
     <div id="drawn-statistics"></div>
 
     <div id="visit-info"></div>
+	
+	<!-- 模态框 -->
+<div id="character-modal" class="modal">
+    <div class="modal-content">
+        <!-- 关闭按钮 -->
+        <button class="close-modal-btn" onclick="closeModal()">×</button>
+        <h1><span id="modal-name"></span></h1> <!-- 干员名称 -->
+        <img id="modal-img" src="" alt="干员立绘">
+        <h3>职业: <span id="modal-profession"></span></h3>
+        <h3>性别: <span id="modal-gender"></span></h3>
+        <h3>生日: <span id="modal-birthday"></span></h3>
+        <h3>种族: <span id="modal-race"></span></h3>
+        <audio id="modal-audio" controls autoplay>
+            <source src="" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+</div>
+
 </div>
 
 <div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
@@ -217,24 +291,24 @@ window.onload = function() {
 };
 // 角色池（头像和名字，所有图片位于 resources 文件夹）
 const MagmaPool = [
-    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star', audio: 'resources/6star1.mp3' },
-    { name: '黎风', img: 'resources/6star2.png', rarity: '6star', audio: 'resources/6star2.mp3' },
-    { name: '余烬', img: 'resources/6star3.png', rarity: '6star', audio: 'resources/6star3.mp3' },
-	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
-	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
-	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
-	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' },
-    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
-	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
-	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3' },
-    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3' },
-    { name: '大潘', img: 'resources/5star3.png', rarity: '5star', audio: 'resources/5star3.mp3' },
-    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star', audio: 'resources/5star4.mp3' },
-    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star', audio: 'resources/4star1.mp3' },
-    { name: '赛希', img: 'resources/4star2.png', rarity: '4star', audio: 'resources/4star2.mp3' },
-    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star', audio: 'resources/4star3.mp3' },
-    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star', audio: 'resources/4star4.mp3' }
+    { name: '洁尔佩塔', img: 'resources/6star1.png', rarity: '6star', audio: 'resources/6star1.mp3', profession: '辅助', gender: '女', birthday: '11月28日', race: '沃尔珀', fullImg: 'resources/6star1s.png' },
+    { name: '黎风', img: 'resources/6star2.png', rarity: '6star', audio: 'resources/6star2.mp3', profession: '近卫', gender: '男', birthday: '7月16日', race: '阿纳萨', fullImg: 'resources/6star2s.png' },
+    { name: '余烬', img: 'resources/6star3.png', rarity: '6star', audio: 'resources/6star3.mp3', profession: '重装', gender: '女', birthday: '4月10日', race: '萨科塔', fullImg: 'resources/6star3s.png' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' },
+	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' },
+	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' },
+    { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3', profession: '特种', gender: '女', birthday: '10月25日', race: '卡特斯', fullImg: 'resources/5star1s.png' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3', profession: '特种', gender: '女', birthday: '10月25日', race: '卡特斯', fullImg: 'resources/5star1s.png' },
+	{ name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3', profession: '特种', gender: '女', birthday: '10月25日', race: '卡特斯', fullImg: 'resources/5star1s.png' },
+    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3', profession: '特种', gender: '女', birthday: '1月3日', race: '库兰塔', fullImg: 'resources/5star2s.png' },
+    { name: '大潘', img: 'resources/5star3.png', rarity: '5star', audio: 'resources/5star3.mp3', profession: '近卫', gender: '男', birthday: '5月19日', race: '乌萨斯', fullImg: 'resources/5star3s.png' },
+    { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star', audio: 'resources/5star4.mp3', profession: '术师', gender: '女', birthday: '3月16日', race: '黎博利', fullImg: 'resources/5star4s.png' },
+    { name: '昼雪', img: 'resources/4star1.png', rarity: '4star', audio: 'resources/4star1.mp3', profession: '重装', gender: '女', birthday: '12月20日', race: '乌萨斯', fullImg: 'resources/4star1s.png' },
+    { name: '赛希', img: 'resources/4star2.png', rarity: '4star', audio: 'resources/4star2.mp3', profession: '辅助', gender: '女', birthday: '5月16日', race: '萨卡兹', fullImg: 'resources/4star2s.png' },
+    { name: '陈千语', img: 'resources/4star3.png', rarity: '4star', audio: 'resources/4star3.mp3', profession: '近卫', gender: '女', birthday: '8月18日', race: '龙', fullImg: 'resources/4star3s.png' },
+    { name: '狼卫', img: 'resources/4star4.png', rarity: '4star', audio: 'resources/4star4.mp3', profession: '近卫', gender: '男', birthday: '11月16日', race: '鲁珀', fullImg: 'resources/4star4s.png' }
 ];
 
 let totalCardsDrawn = 0; // 总抽卡次数
@@ -340,7 +414,7 @@ function performDraw() {
         const card = document.createElement('div');
         card.classList.add('card', character.rarity);
         card.innerHTML = `
-            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
+            <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
             <div class="card-name">${character.name}</div>
         `;
         resultDiv.appendChild(card);
@@ -411,7 +485,7 @@ function PerformOneDraw() {
         const card = document.createElement('div');
         card.classList.add('card', character.rarity);
         card.innerHTML = `
-            <img src="${character.img}" alt="${character.name}" onclick="playCharacterVoice('${character.audio}')">
+            <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
             <div class="card-name">${character.name}</div>
         `;
         resultDiv.appendChild(card);
@@ -475,6 +549,51 @@ function playCharacterVoice(audioFile) {
     // 创建并播放新的音频
     currentAudio = new Audio(audioFile);
     currentAudio.play();
+}
+// 显示模态框并填充干员信息
+function showCharacterModal(character) {
+    const modal = document.getElementById('character-modal');
+    const modalName = document.getElementById('modal-name');
+    const modalImg = document.getElementById('modal-img');
+    const modalProfession = document.getElementById('modal-profession');
+    const modalGender = document.getElementById('modal-gender');
+    const modalBirthday = document.getElementById('modal-birthday');
+    const modalRace = document.getElementById('modal-race');
+    const modalAudio = document.getElementById('modal-audio');
+
+    // 设置干员名称
+    modalName.innerText = character.name;
+
+    // 根据稀有度设置名称颜色
+    modalName.className = ''; // 清空之前的颜色类
+    switch (character.rarity) {
+        case '6star':
+            modalName.classList.add('orange'); // 六星橙色
+            break;
+        case '5star':
+            modalName.classList.add('gold'); // 五星金色
+            break;
+        case '4star':
+            modalName.classList.add('purple'); // 四星紫色
+            break;
+    }
+
+    // 设置其他信息
+    modalImg.src = character.fullImg;
+    modalProfession.innerText = character.profession;
+    modalGender.innerText = character.gender;
+    modalBirthday.innerText = character.birthday;
+    modalRace.innerText = character.race;
+    modalAudio.src = character.audio;
+
+    // 显示模态框
+    modal.style.display = 'flex';
+}
+
+// 关闭模态框
+function closeModal() {
+    const modal = document.getElementById('character-modal');
+    modal.style.display = 'none';
 }
 </script>
 </body>
