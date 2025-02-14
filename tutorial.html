@@ -611,7 +611,6 @@ function displayDrawnStatistics() {
     }
 }
 
-// 显示模态框并填充干员信息
 function showCharacterModal(character) {
     const modal = document.getElementById('character-modal');
     const modalName = document.getElementById('modal-name');
@@ -621,6 +620,7 @@ function showCharacterModal(character) {
     const modalBirthday = document.getElementById('modal-birthday');
     const modalRace = document.getElementById('modal-race');
     const modalAudio = document.getElementById('modal-audio');
+    const bgm = document.getElementById('bgm');
 
     // 设置干员名称
     modalName.innerText = character.name;
@@ -647,9 +647,16 @@ function showCharacterModal(character) {
     modalRace.innerText = character.race;
     modalAudio.src = character.audio;
 
+    // 降低背景音乐音量至50%
+    bgm.volume = 0.5;
+
+    // 监听语音播放结束事件，恢复背景音乐音量
+    modalAudio.onended = function() {
+        bgm.volume = 1; // 恢复背景音乐音量
+    };
+
     // 显示模态框
     modal.style.display = 'flex';
-	
 	// 完成任务3
     if (tutorialStep === 3) {
         document.getElementById('task3').style.color = 'green';
@@ -660,6 +667,17 @@ function showCharacterModal(character) {
 // 关闭模态框
 function closeModal() {
     const modal = document.getElementById('character-modal');
+    const modalAudio = document.getElementById('modal-audio');
+    const bgm = document.getElementById('bgm');
+
+    // 停止语音播放
+    modalAudio.pause();
+    modalAudio.currentTime = 0;
+
+    // 恢复背景音乐音量
+    bgm.volume = 1;
+
+    // 隐藏模态框
     modal.style.display = 'none';
 }
 

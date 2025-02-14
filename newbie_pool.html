@@ -305,6 +305,7 @@ const newbiePool = [
 let totalCardsDrawn = 0; // 总抽卡次数
 let hasSixStar = false;  // 标记是否已经抽到六星
 let drawnCards = [];  // 用于记录当前抽到的卡
+let bgmVolume = 1;
 
 // 角色被抽到的统计
 let characterDrawCounts = {
@@ -440,17 +441,6 @@ function displayDrawnStatistics() {
     }
 }
 
-function playCharacterVoice(audioFile) {
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-    }
-
-    // 创建并播放新的音频
-    currentAudio = new Audio(audioFile);
-    currentAudio.play();
-}
-// 显示模态框并填充干员信息
 function showCharacterModal(character) {
     const modal = document.getElementById('character-modal');
     const modalName = document.getElementById('modal-name');
@@ -460,6 +450,7 @@ function showCharacterModal(character) {
     const modalBirthday = document.getElementById('modal-birthday');
     const modalRace = document.getElementById('modal-race');
     const modalAudio = document.getElementById('modal-audio');
+    const bgm = document.getElementById('bgm');
 
     // 设置干员名称
     modalName.innerText = character.name;
@@ -486,6 +477,14 @@ function showCharacterModal(character) {
     modalRace.innerText = character.race;
     modalAudio.src = character.audio;
 
+    // 降低背景音乐音量至50%
+    bgm.volume = 0.5;
+
+    // 监听语音播放结束事件，恢复背景音乐音量
+    modalAudio.onended = function() {
+        bgm.volume = 1; // 恢复背景音乐音量
+    };
+
     // 显示模态框
     modal.style.display = 'flex';
 }
@@ -493,6 +492,17 @@ function showCharacterModal(character) {
 // 关闭模态框
 function closeModal() {
     const modal = document.getElementById('character-modal');
+    const modalAudio = document.getElementById('modal-audio');
+    const bgm = document.getElementById('bgm');
+
+    // 停止语音播放
+    modalAudio.pause();
+    modalAudio.currentTime = 0;
+
+    // 恢复背景音乐音量
+    bgm.volume = 1;
+
+    // 隐藏模态框
     modal.style.display = 'none';
 }
 
