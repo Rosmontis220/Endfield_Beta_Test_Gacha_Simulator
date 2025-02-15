@@ -423,6 +423,8 @@
 <audio id="logout-sound" src="resources/logout.mp3" preload="auto"></audio>
 <audio id="indi-sound" src="resources/indi.mp3" preload="auto"></audio>
 <audio id="click2-sound" src="resources/click2.mp3" preload="auto"></audio>
+<audio id="female-voice" src="resources/endmin_f.mp3" preload="auto"></audio>
+<audio id="male-voice" src="resources/endmin_m.mp3" preload="auto"></audio>
 <audio id="bgm" loop>
     <source src="resources/index_bgm.mp3" type="audio/mp3">
     您的浏览器不支持 audio 元素。
@@ -464,10 +466,22 @@ window.onload = function() {
     }
 
     // 新增函数：显示性别确认模态框
-    function showGenderConfirmation(gender) {
-        window.selectedGender = gender; // 临时存储选择的性别
-        showModal('gender-confirmation-modal');
+function showGenderConfirmation(gender) {
+    window.selectedGender = gender; // 临时存储选择的性别
+
+    // 播放对应性别的语音
+    if (gender === 'female') {
+        var femaleVoice = document.getElementById('female-voice');
+        femaleVoice.currentTime = 0; // 重置音频到开始
+        femaleVoice.play(); // 播放女性语音
+    } else if (gender === 'male') {
+        var maleVoice = document.getElementById('male-voice');
+        maleVoice.currentTime = 0; // 重置音频到开始
+        maleVoice.play(); // 播放男性语音
     }
+
+    showModal('gender-confirmation-modal'); // 显示确认模态框
+}
 	
 function animateProgressBar() {
     var progressBar = document.querySelector('.progress-bar');
