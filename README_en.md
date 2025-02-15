@@ -8,6 +8,8 @@ Now Newbie Pool & Laevatain Pool & Yvonne Pool Updated.
 
 (English is not supported, so please keep your translation tool on.)
 
+this file is not updating now.
+
 # Changelog
 
 [See the changelog](update_en.md)
