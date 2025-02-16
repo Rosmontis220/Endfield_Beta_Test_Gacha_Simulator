@@ -32,6 +32,6 @@
 
 -诶！你猜怎么着！我还有办法！
 
-![image](resources/readmeeasteregg.png)[传送门](https://github.com/SuikoAkari/ArkFieldPS)
+![博士？](resources/readmeeasteregg.png)[传送门](https://github.com/SuikoAkari/ArkFieldPS)
 
 -？你是什么博士？
