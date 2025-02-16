@@ -32,6 +32,6 @@
 
 -诶！你猜怎么着！我还有办法！
 
-[![](/resources/readmeeasteregg.png)](https://github.com/SuikoAkari/ArkFieldPS)
+![](/resources/readmeeasteregg.png)
 
 -？你是什么博士？
