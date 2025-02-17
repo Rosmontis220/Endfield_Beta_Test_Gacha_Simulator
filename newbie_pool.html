@@ -156,7 +156,10 @@
     border-radius: 10px;
     width: 80%;
     max-width: 600px;
+    max-height: 80vh; /* 设置最大高度为视口高度的80% */
+    overflow-y: auto; /* 如果内容超出高度，显示滚动条 */
     position: relative;
+    box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
 }
 
 .modal-content h1 {
@@ -248,7 +251,7 @@
 <div id="character-modal" class="modal">
     <div class="modal-content">
         <!-- 关闭按钮 -->
-        <button class="close-modal-btn" onclick="closeModal()">×</button>
+        <button class="close-modal-btn" onclick="closeModal();playClickSound()">×</button>
         <h1><span id="modal-name"></span></h1> <!-- 干员名称 -->
         <img id="modal-img" src="" alt="干员立绘">
         <h3>职业: <span id="modal-profession"></span></h3>
