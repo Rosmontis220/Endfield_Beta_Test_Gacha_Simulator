@@ -323,6 +323,20 @@
 		max-width: 500px;
     }
 }
+
+.download-app-btn {
+    margin-top: 20px;
+    font-size: 14px;
+    color: white;
+    background-color: green;
+    padding: 12px 24px;
+    border-radius: 20px;
+    cursor: url('resources/cursor.png'), auto;
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 	</style>
 </head>
 <body>
@@ -372,6 +386,7 @@
         </div>
 
         <button class="logout-btn" onclick="playLogoutSound(); showLogoutConfirmation()">注销账号</button>
+		<button class="download-app-btn" onclick="playClickSound(); window.location.href='https://github.com/Rosmontis220/Endfield_Beta_Test_Gacha_Simulator/releases/download/EndfieldGachaSimulator/2.1.2_Android.apk'">下载安卓APP</button>
         <button class="disclaimer-btn" onclick="playIndiSound(); toggleDisclaimer()">查看程序说明</button>
 
         <div class="disclaimer-content" id="disclaimer-content">
