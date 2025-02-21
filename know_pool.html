@@ -54,10 +54,9 @@
 		.card {
 			width: 128px;
 			height: 128px;
-			overflow: hidden;
 			background-color: #fafafa;
 			text-align: center;
-			padding-top: 10px;
+			padding-top: 0px;
 		}
 		.card img {
 			width: 100%;
@@ -67,7 +66,6 @@
 		.card-name {
 			font-size: 15px;
 			margin-top: 0px;
-			color: black; 
 		}
 		.card.6star .card-name {
 			color: orange;
@@ -97,7 +95,7 @@
 			color: #555;
 		}
 		#counter {
-			margin-top: 20px;
+			margin-top: 40px;
 			font-size: 16px;
 			color: #333;
 		}
@@ -106,36 +104,6 @@
 			font-size: 16px;
 			color: #333;
 			text-align: left;
-		}
-		.orange-text {
-			color: orange;
-		}
-
-		.gold-text {
-			color: gold;
-		}
-
-		.black-text {
-			color: black;
-		}
-		
-		.magenta-text {
-			color: magenta;
-		}
-		.button-container {
-			display: flex;
-			flex-wrap: wrap; 
-			justify-content: center; 
-			align-items: center;
-			gap: 10px; 
-			width: 100%; 
-			max-width: 80vw;
-			margin: 0 auto; 
-			padding: 10px;
-		}
-		.button-container button {
-			flex: 1;
-			margin: 5px;
 		}
 .modal {
     position: fixed;
@@ -211,7 +179,36 @@
 .modal-content h1 .purple {
     color: purple; /* 四星紫色 */
 }
+		.orange-text {
+			color: orange;
+		}
 
+		.gold-text {
+			color: gold;
+		}
+
+		.black-text {
+			color: black;
+		}
+		
+		.magenta-text {
+			color: magenta;
+		}
+		.button-container {
+			display: flex;
+			flex-wrap: wrap; 
+			justify-content: center; 
+			align-items: center;
+			gap: 10px; 
+			width: 100%; 
+			max-width: 80vw;
+			margin: 0 auto; 
+			padding: 10px;
+		}
+		.button-container button {
+			flex: 1;
+			margin: 5px;
+		}
 		@media (min-width: 768px) {
 			.btn-draw {
 				width: 22%; 
@@ -418,8 +415,8 @@ function performDraw() {
         card.classList.add('card', character.rarity);
         card.innerHTML = `
             <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-            <div class="card-name">${character.name}</div>
-        `;
+			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+		`;
         resultDiv.appendChild(card);
     });
 
@@ -451,7 +448,7 @@ function PerformOneDraw() {
 
         // 第120抽必出莱万汀
         if (totalCardsDrawn === 120) {
-            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3' }; 
+            let character = { name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' }; 
             drawnCards.push(character);
             characterDrawCounts[drawnCards[i].name]++;
             noSixStarCount = 0;
@@ -489,8 +486,8 @@ function PerformOneDraw() {
         card.classList.add('card', character.rarity);
         card.innerHTML = `
             <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-            <div class="card-name">${character.name}</div>
-        `;
+			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+		`;
         resultDiv.appendChild(card);
     });
 
@@ -640,6 +637,15 @@ function closeModal() {
 
     // 隐藏模态框
     modal.style.display = 'none';
+}
+
+function getColorByRarity(rarity) {
+    switch (rarity) {
+        case '6star': return 'orange';
+        case '5star': return 'gold';
+        case '4star': return 'purple';
+        default: return 'black';
+    }
 }
 </script>
 </body>

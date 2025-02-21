@@ -54,10 +54,9 @@
 		.card {
 			width: 128px;
 			height: 128px;
-			overflow: hidden;
 			background-color: #fafafa;
 			text-align: center;
-			padding-top: 10px;
+			padding-top: 0px;
 		}
 		.card img {
 			width: 100%;
@@ -67,7 +66,6 @@
 		.card-name {
 			font-size: 15px;
 			margin-top: 0px;
-			color: black; 
 		}
 		.card.6star .card-name {
 			color: orange;
@@ -97,7 +95,7 @@
 			color: #555;
 		}
 		#counter {
-			margin-top: 20px;
+			margin-top: 40px;
 			font-size: 16px;
 			color: #333;
 		}
@@ -416,8 +414,8 @@ function performDraw() {
         card.classList.add('card', character.rarity);
         card.innerHTML = `
             <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-            <div class="card-name">${character.name}</div>
-        `;
+			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+		`;
         resultDiv.appendChild(card);
     });
 
@@ -449,7 +447,7 @@ function PerformOneDraw() {
 
         // 第120抽必出莱万汀
         if (totalCardsDrawn === 120) {
-            let character = { name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star1.mp3' }; 
+            let character = { name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' }; 
             drawnCards.push(character);
             characterDrawCounts[drawnCards[i].name]++;
             noSixStarCount = 0;
@@ -486,9 +484,9 @@ function PerformOneDraw() {
         const card = document.createElement('div');
         card.classList.add('card', character.rarity);
         card.innerHTML = `
-            <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-            <div class="card-name">${character.name}</div>
-        `;
+			<img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
+			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+		`;
         resultDiv.appendChild(card);
     });
 
@@ -638,6 +636,15 @@ function closeModal() {
 
     // 隐藏模态框
     modal.style.display = 'none';
+}
+
+function getColorByRarity(rarity) {
+    switch (rarity) {
+        case '6star': return 'orange';
+        case '5star': return 'gold';
+        case '4star': return 'purple';
+        default: return 'black';
+    }
 }
 </script>
 </body>
