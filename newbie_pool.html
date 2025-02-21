@@ -158,8 +158,27 @@
     max-width: 600px;
     max-height: 80vh; /* 设置最大高度为视口高度的80% */
     overflow-y: auto; /* 如果内容超出高度，显示滚动条 */
-    position: relative;
+    position: relative; /* 为关闭按钮提供定位上下文 */
     box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
+}
+
+.close-modal-btn {
+    position: absolute; /* 相对于 .modal-content 定位 */
+    top: 10px; /* 距离顶部 10px */
+    right: 10px; /* 距离右侧 10px */
+    width: 40px;
+    height: 40px;
+    background-color: #808080; /* 灰色背景 */
+    color: white; /* 白色字体 */
+    border: none;
+    border-radius: 50%; /* 圆形 */
+    font-size: 24px;
+    cursor: url('resources/cursor.png'), auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    z-index: 1001; /* 确保关闭按钮在模态框内容之上 */
 }
 
 .modal-content h1 {
@@ -180,23 +199,7 @@
 .modal-content audio {
     margin-top: 5px;
 }
-.close-modal-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 40px;
-    height: 40px;
-    background-color: #808080; /* 灰色背景 */
-    color: white; /* 白色字体 */
-    border: none;
-    border-radius: 50%; /* 圆形 */
-    font-size: 24px;
-    cursor: url('resources/cursor.png'), auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
+
 
 .modal-content h1 .orange {
     color: orange; /* 六星橙色 */

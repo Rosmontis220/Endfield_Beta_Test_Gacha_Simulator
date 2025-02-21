@@ -158,8 +158,27 @@
     max-width: 600px;
     max-height: 80vh; /* 设置最大高度为视口高度的80% */
     overflow-y: auto; /* 如果内容超出高度，显示滚动条 */
-    position: relative;
+    position: relative; /* 为关闭按钮提供定位上下文 */
     box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
+}
+
+.close-modal-btn {
+    position: absolute; /* 相对于 .modal-content 定位 */
+    top: 10px; /* 距离顶部 10px */
+    right: 10px; /* 距离右侧 10px */
+    width: 40px;
+    height: 40px;
+    background-color: #808080; /* 灰色背景 */
+    color: white; /* 白色字体 */
+    border: none;
+    border-radius: 50%; /* 圆形 */
+    font-size: 24px;
+    cursor: url('resources/cursor.png'), auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    z-index: 1001; /* 确保关闭按钮在模态框内容之上 */
 }
 
 .modal-content h1 {
@@ -179,23 +198,6 @@
 
 .modal-content audio {
     margin-top: 5px;
-}
-.close-modal-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 40px;
-    height: 40px;
-    background-color: #808080; /* 灰色背景 */
-    color: white; /* 白色字体 */
-    border: none;
-    border-radius: 50%; /* 圆形 */
-    font-size: 24px;
-    cursor: url('resources/cursor.png'), auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease;
 }
 
 .modal-content h1 .orange {
@@ -301,12 +303,7 @@ const MagmaPool = [
     { name: '余烬', img: 'resources/6star3.png', rarity: '6star', audio: 'resources/6star3.mp3', profession: '重装', gender: '女', birthday: '4月10日', race: '萨科塔', fullImg: 'resources/6star3s.png' },
 	{ name: '莱万汀', img: 'resources/6star4.png', rarity: '6star', audio: 'resources/6star4.mp3', profession: '术师', gender: '女', birthday: '1月22日', race: '萨卡兹', fullImg: 'resources/6star4s.png' },
 	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' },
-	{ name: '伊冯', img: 'resources/6star5.png', rarity: '6star', audio: 'resources/6star5.mp3', profession: '术师', gender: '女', birthday: '5月9日', race: '瓦伊凡', fullImg: 'resources/6star5s.png' },
     { name: '艾维文娜', img: 'resources/5star1.png', rarity: '5star', audio: 'resources/5star1.mp3', profession: '特种', gender: '女', birthday: '10月25日', race: '卡特斯', fullImg: 'resources/5star1s.png' },
-    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3', profession: '特种', gender: '女', birthday: '1月3日', race: '库兰塔', fullImg: 'resources/5star2s.png' },
-    { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3', profession: '特种', gender: '女', birthday: '1月3日', race: '库兰塔', fullImg: 'resources/5star2s.png' },
     { name: '弧光', img: 'resources/5star2.png', rarity: '5star', audio: 'resources/5star2.mp3', profession: '特种', gender: '女', birthday: '1月3日', race: '库兰塔', fullImg: 'resources/5star2s.png' },
     { name: '大潘', img: 'resources/5star3.png', rarity: '5star', audio: 'resources/5star3.mp3', profession: '近卫', gender: '男', birthday: '5月19日', race: '乌萨斯', fullImg: 'resources/5star3s.png' },
     { name: '佩丽卡', img: 'resources/5star4.png', rarity: '5star', audio: 'resources/5star4.mp3', profession: '术师', gender: '女', birthday: '3月16日', race: '黎博利', fullImg: 'resources/5star4s.png' },
@@ -507,24 +504,58 @@ function PerformOneDraw() {
 // 生成角色数据
 function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false) {
     let roll = Math.random();
-	if (noSixStarCount < 65) {
-		if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
-			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
-		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
-			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
-		} else {
-			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
-		}
-	} else {
-		let NewChance = (noSixStarCount - 65) * 0.05;
-		if (forceSixStar || (roll < sixStarChance + NewChance && !forceFiveStar)) {
-			return MagmaPool.filter(c => c.rarity === '6star')[Math.floor(Math.random() * 8)];
-		} else if (forceFiveStar || (roll < sixStarChance + fiveStarChance + NewChance && !forceSixStar)) {
-			return MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 6)];
-		} else {
-			return MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
-		}
-	}
+    let character;
+
+    if (noSixStarCount < 65) {
+        if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
+            // 判断是否为UP角色（50%概率）
+            if (Math.random() < 0.5) {
+                // 抽取UP角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name === '伊冯')[0];
+            } else {
+                // 抽取其他6星角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name !== '伊冯')[Math.floor(Math.random() * 4)];
+            }
+        } else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
+            // 判断是否为UP角色（50%概率）
+            if (Math.random() < 0.5) {
+                // 抽取UP角色
+                character = MagmaPool.filter(c => c.rarity === '5star' && c.name === '弧光')[0];
+            } else {
+                // 抽取其他5星角色
+                character = MagmaPool.filter(c => c.rarity === '5star' && c.name !== '弧光')[Math.floor(Math.random() * 3)];
+            }
+        } else {
+            // 抽取4星角色
+            character = MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+        }
+    } else {
+        let NewChance = (noSixStarCount - 65) * 0.05;
+        if (forceSixStar || (roll < sixStarChance + NewChance && !forceFiveStar)) {
+            // 判断是否为UP角色（50%概率）
+            if (Math.random() < 0.5) {
+                // 抽取UP角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name === '伊冯')[0];
+            } else {
+                // 抽取其他6星角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name !== '伊冯')[Math.floor(Math.random() * 4)];
+            }
+        } else if (forceFiveStar || (roll < sixStarChance + fiveStarChance + NewChance && !forceSixStar)) {
+            // 判断是否为UP角色（50%概率）
+            if (Math.random() < 0.5) {
+                // 抽取UP角色
+                character = MagmaPool.filter(c => c.rarity === '5star' && c.name === '弧光')[0];
+            } else {
+                // 抽取其他5星角色
+                character = MagmaPool.filter(c => c.rarity === '5star' && c.name !== '弧光')[Math.floor(Math.random() * 3)];
+            }
+        } else {
+            // 抽取4星角色
+            character = MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 4)];
+        }
+    }
+
+    return character;
 }
 
 // 更新角色被抽到的次数
