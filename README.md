@@ -2,9 +2,9 @@
 
 [CN](README.md) | [EN](README_en.md)
 
-模拟终末地二测抽卡 现版本：2.1.5
+模拟终末地二测抽卡 现版本：WIN 2.2.0 | AND 2.2.0
 
-现已更新新手寻访、熔火灼痕、知与行这三个卡池，现已支持账号与UID，加入账号信息交互功能。
+现已更新新手寻访、熔火灼痕、知与行这三个卡池和五号遗产武器池，支持账号与UID，加入账号信息交互功能。
 
 体验网址：https://rosmontis220.github.io/Endfield_Beta_Test_Gacha_Simulator/
 
