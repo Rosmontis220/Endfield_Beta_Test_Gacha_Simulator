@@ -135,6 +135,13 @@
 			margin: 10px;
 			cursor: url('resources/cursor.png'), auto;
         }
+		.poolw-buttons img {
+            width: 70%;
+			max-width: 300px; 
+			height: auto;
+			margin: 10px;
+			cursor: url('resources/cursor.png'), auto;
+        }
 		
 	.loading-container {
 		text-align: center;
@@ -307,6 +314,13 @@
 				margin: 10px;
 				cursor: url('resources/cursor.png'), auto;
 			}
+			.poolw-buttons img {
+				width: 80%;
+				max-width: 600px; 
+				height: auto;
+				margin: 10px;
+				cursor: url('resources/cursor.png'), auto;
+			}
 		}
 @media (max-width: 768px) {
     .gender-images {
@@ -381,9 +395,12 @@
             <img src="resources/pool2.png" alt="熔火灼痕" class="pool-button" onclick="playClickSound(); window.location.href='magma_pool.html'">
             <img src="resources/pool3.png" alt="知与行" class="pool-button" onclick="playClickSound(); window.location.href='know_pool.html'">
         </div>
+		<div class="poolw-buttons">
+			<img src="resources/poolw.png" alt="武库交易所（五号遗产）" class="poolw-button" onclick="playClickSound(); window.location.href='5legacy_pool.html'">
+		</div>
 
         <button class="logout-btn" onclick="playLogoutSound(); showLogoutConfirmation()">注销账号</button>
-		<button class="download-app-btn" onclick="playClickSound(); window.location.href='https://github.com/Rosmontis220/Endfield_Beta_Test_Gacha_Simulator/releases/download/EndfieldGachaSimulator/2.1.4_Android.apk'">下载安卓APP</button>
+		<button class="download-app-btn" onclick="playClickSound(); window.location.href='https://github.com/Rosmontis220/Endfield_Beta_Test_Gacha_Simulator/releases/download/EndfieldGachaSimulator/2.1.2_Android.apk'">下载安卓APP</button>
         <button class="disclaimer-btn" onclick="playIndiSound(); toggleDisclaimer()">查看程序说明</button>
 
         <div class="disclaimer-content" id="disclaimer-content">

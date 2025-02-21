@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武库交易所 - 终末地抽卡模拟</title>
+	<link rel="icon" href="resources/favicon.ico" type="image/x-icon">
+    <style>
+@font-face {
+    font-family: 'Noto Sans Hans';
+    src: url('resources/NotoSansHans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+		body {
+			font-family: 'Noto Sans Hans', sans-serif;
+			cursor: url('resources/cursor.png'), auto;
+			background-image: url('resources/background1.jpg');
+            background-size: cover;
+            background-position: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+            min-height: 100vh;
+			overflow: auto;
+			margin: 0;
+			background-color: #f4f4f4;
+			flex-direction: column;
+			text-align: center;
+		}
+		.container {
+			background-image: url('resources/background3.jpg');
+            background-size: cover;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			width: 90%;
+			max-width: 1600px;
+		}
+		img.logo {
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 300px;
+			margin-bottom: 20px;
+		}
+		img.logow {
+			margin: 0 auto;
+			display: block;
+			width: 100%;
+			max-width: 600px;
+			margin-bottom: 20px;
+		}
+		.result {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 20px;
+		}
+		.card {
+			width: 128px;
+			height: 128px;
+			background-color: #fafafa;
+			text-align: center;
+		}
+		.card img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.card-name {
+			font-size: 15px;
+			margin-top: 0px;
+			color: black; 
+		}
+		.card.6star .card-name {
+			color: orange;
+		}
+		.card.5star .card-name {
+			color: gold;
+		}
+		.card.4star .card-name {
+			color: purple; 
+		}
+		button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: #d3d3d3;
+			color: black;
+			border: none;
+			transition: none;  /* 禁用过渡效果 */
+		}
+		.btn-draw {
+			width: 75%;
+			max-width: 400px;
+			height: auto;
+		}
+		#visit-info {
+			margin-top: 20px;
+			font-size: 14px;
+			color: #555;
+		}
+		#counter {
+			margin-top: 20px;
+			font-size: 16px;
+			color: #333;
+		}
+		#drawn-statistics {
+			margin-top: 20px;
+			font-size: 16px;
+			color: #333;
+			text-align: left;
+		}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh; /* 设置最大高度为视口高度的80% */
+    overflow-y: auto; /* 如果内容超出高度，显示滚动条 */
+    position: relative; /* 为关闭按钮提供定位上下文 */
+    box-sizing: border-box; /* 确保 padding 不会影响高度计算 */
+}
+
+.close-modal-btn {
+    position: absolute; /* 相对于 .modal-content 定位 */
+    top: 10px; /* 距离顶部 10px */
+    right: 10px; /* 距离右侧 10px */
+    width: 40px;
+    height: 40px;
+    background-color: #808080; /* 灰色背景 */
+    color: white; /* 白色字体 */
+    border: none;
+    border-radius: 50%; /* 圆形 */
+    font-size: 24px;
+    cursor: url('resources/cursor.png'), auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    z-index: 1001; /* 确保关闭按钮在模态框内容之上 */
+}
+
+.modal-content h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content h3 {
+    text-align: center;
+}
+
+.modal-content img {
+    width: 80%;
+    max-width: 2000px;
+    margin-bottom: 20px;
+}
+
+.modal-content audio {
+    margin-top: 5px;
+}
+
+.modal-content h1 .orange {
+    color: orange; /* 六星橙色 */
+}
+
+.modal-content h1 .gold {
+    color: gold; /* 五星金色 */
+}
+
+.modal-content h1 .purple {
+    color: purple; /* 四星紫色 */
+}
+		.orange-text {
+			color: orange;
+		}
+
+		.gold-text {
+			color: gold;
+		}
+
+		.black-text {
+			color: black;
+		}
+		
+		.magenta-text {
+			color: magenta;
+		}
+		.button-container {
+			display: flex;
+			flex-wrap: wrap; 
+			justify-content: center; 
+			align-items: center;
+			gap: 10px; 
+			width: 100%; 
+			max-width: 80vw;
+			margin: 0 auto; 
+			padding: 10px;
+		}
+		.button-container button {
+			flex: 1;
+			margin: 5px;
+		}
+		@media (min-width: 768px) {
+			.btn-draw {
+				width: 22%; 
+				max-width: 500px; 
+				height: auto; 
+			}
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="container">
+    <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
+    <img src="resources/poolw.png" class="logow" alt="武库交易所（五号遗产概率提升）">
+	<img src="resources/namew.png" class="logow" alt="五号遗产概率提升">
+
+    <div class="button-container">
+        <img src="resources/home.png" alt="返回主页" class="btn-draw" onclick="playClickSound(); window.location.href='index.html'">
+		<img src="resources/refresh.png" alt="刷新卡池" class="btn-draw" onclick="playClickSound(); window.location.reload();">
+        <img src="resources/10draw.png" alt="寻访十次" class="btn-draw" onclick="playClickSound(); performDraw();">
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <!-- 显示抽卡次数 -->
+    <div id="counter">当前抽卡次数: 0</div>
+
+    <!-- 显示角色被抽到的次数 -->
+    <div id="drawn-statistics"></div>
+
+    <div id="visit-info"></div>
+
+</div>
+
+<div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
+    管理员已进入任务待命位置
+</div>
+
+<!-- 音乐与音效 -->
+<audio id="bgm" loop>
+    <source src="resources/background_music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<audio id="click-sound">
+    <source src="resources/click.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+window.onload = function() {
+    var uid = localStorage.getItem('uid');
+    var uidDisplay = document.getElementById('uid-display');
+    if (uid) {
+        uidDisplay.innerHTML = `同人模拟器，不代表官方机制 UID: ${uid}`;
+    } else {
+        uidDisplay.innerHTML = '管理员已进入任务待命位置';
+    }
+};
+// 角色池（头像和名字，所有图片位于 resources 文件夹）
+const MagmaPool = [
+    { name: '湍流', img: 'resources/6star1w.png', rarity: '6star' },
+    { name: '同类相食', img: 'resources/6star2w.png', rarity: '6star' },
+    { name: '塔罗斯旋涡', img: 'resources/6star3w.png', rarity: '6star' },
+	{ name: '五号遗产', img: 'resources/6star4w.png', rarity: '6star' },
+	{ name: '忘机', img: 'resources/6star5w.png', rarity: '6star' },
+	{ name: '骑士精神', img: 'resources/6star6w.png', rarity: '6star' },
+	{ name: '昔日精品', img: 'resources/6star7w.png', rarity: '6star' },
+    { name: '钢铁余音', img: 'resources/5star1w.png', rarity: '5star' },
+    { name: '黯色火炬', img: 'resources/5star2w.png', rarity: '5star' },
+    { name: '坚城铸造者', img: 'resources/5star3w.png', rarity: '5star' },
+    { name: '热熔切割器', img: 'resources/5star4w.png', rarity: '5star' },
+	{ name: '作品：应力', img: 'resources/5star5w.png', rarity: '5star' },
+	{ name: '时代雕刻家', img: 'resources/5star6w.png', rarity: '5star' },
+	{ name: '理性告别', img: 'resources/5star7w.png', rarity: '5star' },
+	{ name: '骁勇', img: 'resources/5star8w.png', rarity: '5star' },
+	{ name: '碎岩机', img: 'resources/5star9w.png', rarity: '5star' },
+	{ name: '嵌合正义', img: 'resources/5star10w.png', rarity: '5star' },
+	{ name: '莫奈何', img: 'resources/5star11w.png', rarity: '5star' },
+	{ name: '作品：蚀象', img: 'resources/5star12w.png', rarity: '5star' },
+	{ name: '悼亡诗', img: 'resources/5star13w.png', rarity: '5star' },
+	{ name: '迷失荒野', img: 'resources/5star14w.png', rarity: '5star' },
+	{ name: '终点之声', img: 'resources/5star15w.png', rarity: '5star' },
+	{ name: '未尝不利', img: 'resources/5star16w.png', rarity: '5star' },
+	{ name: '典范', img: 'resources/5star17w.png', rarity: '5star' },
+    { name: '压轴好戏', img: 'resources/4star1w.png', rarity: '4star' },
+    { name: '应急手段', img: 'resources/4star2w.png', rarity: '4star' },
+    { name: '长路', img: 'resources/4star3w.png', rarity: '4star' },
+    { name: '呼啸守卫', img: 'resources/4star4w.png', rarity: '4star' },
+	{ name: '天使杀手', img: 'resources/4star5w.png', rarity: '4star' },
+	{ name: '寻路者道标', img: 'resources/4star6w.png', rarity: '4star' },
+	{ name: '荧光雷羽', img: 'resources/4star7w.png', rarity: '4star' },
+	{ name: '全自动骇新星', img: 'resources/4star8w.png', rarity: '4star' },
+	{ name: '誓言', img: 'resources/4star9w.png', rarity: '4star' },
+	{ name: '工业零点一', img: 'resources/4star10w.png', rarity: '4star' },
+];
+
+let totalCardsDrawn = 0; // 总抽卡次数
+let drawnCards = [];  // 用于记录当前抽到的卡
+let noSixStarCount = 0; // 未抽到六星次数
+let bgmVolume = 1;
+
+// 角色被抽到的统计
+let characterDrawCounts = {
+    '湍流': 0,
+    '同类相食': 0,
+    '塔罗斯旋涡': 0,
+	'五号遗产': 0,
+	'忘机': 0,
+	'骑士精神': 0,
+	'昔日精品': 0,
+    '钢铁余音': 0,
+    '黯色火炬': 0,
+    '坚城铸造者': 0,
+    '热熔切割器': 0,
+	'碎岩机': 0,
+	'嵌合正义': 0,
+	'典范': 0,
+	'未尝不利': 0,
+	'迷失荒野': 0,
+	'终点之声': 0,
+	'莫奈何': 0,
+	'悼亡诗': 0,
+	'作品：应力': 0,
+	'作品：蚀象': 0,
+	'时代雕刻家': 0,
+	'理性告别': 0,
+	'骁勇': 0,
+    '压轴好戏': 0,
+    '应急手段': 0,
+    '长路': 0,
+	'全自动骇新星': 0,
+	'誓言': 0,
+	'荧光雷羽': 0,
+	'工业零点一': 0,
+	'寻路者道标': 0,
+	'天使杀手': 0,
+    '呼啸守卫': 0
+};
+
+// 六星、五星和四星的概率
+const sixStarChance = 0.04;  // 4% 六星概率
+const fiveStarChance = 0.15;  // 15% 五星概率
+const fourStarChance = 1 - sixStarChance - fiveStarChance;  // 剩余部分为四星
+
+let currentAudio = null;
+
+function playClickSound() {
+    const clickSound = document.getElementById("click-sound");
+    clickSound.play();
+}
+
+// 抽卡函数
+function performDraw() {
+    // 播放背景音乐
+    const bgm = document.getElementById("bgm");
+    bgm.play();
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = '';  // 清空上次的结果
+
+    // 更新抽卡次数
+    let cardsToDraw = 10;  // 十连抽为10次
+
+    // 记录当前的抽卡开始编号
+    drawnCards = [];
+    let noFiveOrSixStar = true;
+    let isSixStarDrawn = false; // 标记是否抽到六星
+
+    for (let i = 0; i < cardsToDraw; i++) {
+        totalCardsDrawn++;  // 每抽一次，总抽卡数加1
+
+        // 第80抽必出五号遗产
+        if (totalCardsDrawn === 80) {
+            let character = { name: '五号遗产', img: 'resources/6star4w.png', rarity: '6star', }; 
+            drawnCards.push(character);
+            characterDrawCounts[drawnCards[i].name]++;
+            noSixStarCount = 0;
+        } else{
+        // 如果是第40次抽卡且前39次未出六星，强制出六星
+			if (noSixStarCount === 39) {
+				let character = generateCharacterByProbability(true, false, 0, 1); // 第80次必须六星
+				drawnCards.push(character);
+				characterDrawCounts[drawnCards[i].name]++;
+				noSixStarCount = 0;
+				isSixStarDrawn = true; // 记录六星已经抽到
+			} else {
+				// 如果是十连抽且前九次没有抽到五星，第十抽调整为100%五星
+				if (i === 9 && noFiveOrSixStar) {
+					let character = generateCharacterByProbability(false, true, 0, 1); // 100%五星
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+				} else {
+					let character = generateCharacterByProbability(false, false);
+					drawnCards.push(character);
+					characterDrawCounts[drawnCards[i].name]++;
+					if (character.rarity === '5star' || character.rarity === '6star') {
+						noFiveOrSixStar = false;
+					}
+					if (character.rarity === '6star') {
+						isSixStarDrawn = true;
+					}
+				}
+			}
+		
+			// 如果已抽到六星且是十连最后一抽时，不再中断
+			if (isSixStarDrawn && i === 9) {
+				break;
+			}
+        
+			if (drawnCards[i].rarity === '6star') {
+				noSixStarCount = 0;
+			} else {
+				noSixStarCount++;
+			}
+		}
+	}
+    // 输出抽到的卡
+    drawnCards.forEach((character) => {
+        const card = document.createElement('div');
+        card.classList.add('card', character.rarity);
+        card.innerHTML = `
+            <img src="${character.img}" alt="${character.name}">
+        `;
+        resultDiv.appendChild(card);
+    });
+
+    // 更新当前抽卡次数显示
+    document.getElementById("counter").innerText = `当前抽卡次数: ${totalCardsDrawn}`;
+
+    // 显示角色被抽到的次数
+    displayDrawnStatistics();
+}
+
+// 生成角色数据
+function generateCharacterByProbability(forceSixStar = false, forceFiveStar = false) {
+    let roll = Math.random();
+    let character;
+        if (forceSixStar || (roll < sixStarChance && !forceFiveStar)) {
+            // 判断是否为UP角色（25%概率）
+            if (Math.random() < 0.25) {
+                // 抽取UP角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name === '五号遗产')[0];
+            } else {
+                // 抽取其他6星角色
+                character = MagmaPool.filter(c => c.rarity === '6star' && c.name !== '五号遗产')[Math.floor(Math.random() * 6)];
+            }
+        } else if (forceFiveStar || (roll < sixStarChance + fiveStarChance && !forceSixStar)) {
+            character = MagmaPool.filter(c => c.rarity === '5star')[Math.floor(Math.random() * 17)];
+        } else {
+            // 抽取4星角色
+            character = MagmaPool.filter(c => c.rarity === '4star')[Math.floor(Math.random() * 10)];
+        }
+    return character;
+}
+
+// 更新角色被抽到的次数
+function displayDrawnStatistics() {
+    const statsDiv = document.getElementById('drawn-statistics');
+    statsDiv.innerHTML = '';
+    for (let character in characterDrawCounts) {
+        const count = characterDrawCounts[character];
+        let rarityClass = '';
+        switch (MagmaPool.find(c => c.name === character).rarity) {
+            case '6star':
+                rarityClass = 'orange'; break;
+            case '5star':
+                rarityClass = 'gold'; break;
+            case '4star':
+                rarityClass = 'purple'; break;
+        }
+        statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
+    }
+}
+</script>
+</body>
+</html>
