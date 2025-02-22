@@ -290,6 +290,81 @@
 				height: auto; 
 			}
 		}
+        #statistics-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #statistics-modal .modal-content {
+            background-image: url('resources/background2.jpg');
+            background-size: cover;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        #statistics-modal .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: #808080;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: url('resources/cursor.png'), auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            z-index: 1001;
+        }
+
+        #statistics-modal h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #statistics-modal h3 {
+            text-align: center;
+        }
+
+        #statistics-modal img {
+            width: 80%;
+            max-width: 2000px;
+            margin-bottom: 20px;
+        }
+
+        #statistics-modal audio {
+            margin-top: 5px;
+        }
+
+        /* 统计按钮样式 */
+        .statistics-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: url('resources/cursor.png'), auto;
+            margin-top: 20px;
+        }
 	</style>
 
 </head>
@@ -343,26 +418,36 @@
     <!-- 显示抽卡次数 -->
     <div id="counter">当前抽卡次数: 0</div>
 
-    <!-- 显示角色被抽到的次数 -->
-    <div id="drawn-statistics"></div>
+    <!-- 统计按钮 -->
+    <button class="statistics-btn" onclick="showStatisticsModal()">查看寻访统计</button>
 
     <div id="visit-info"></div>
-	<div id="character-modal" class="modal">
-    <div class="modal-content">
-        <!-- 关闭按钮 -->
-        <button class="close-modal-btn" onclick="closeModal();playClickSound()">×</button>
-        <h1><span id="modal-name"></span></h1> <!-- 干员名称 -->
-        <img id="modal-img" src="" alt="干员立绘">
-        <h3>职业: <span id="modal-profession"></span></h3>
-        <h3>性别: <span id="modal-gender"></span></h3>
-        <h3>生日: <span id="modal-birthday"></span></h3>
-        <h3>种族: <span id="modal-race"></span></h3>
-        <audio id="modal-audio" controls autoplay>
-            <source src="" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
+
+    <!-- 角色信息模态框 -->
+    <div id="character-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal();playClickSound()">×</button>
+            <h1><span id="modal-name"></span></h1>
+            <img id="modal-img" src="" alt="干员立绘">
+            <h3>职业: <span id="modal-profession"></span></h3>
+            <h3>性别: <span id="modal-gender"></span></h3>
+            <h3>生日: <span id="modal-birthday"></span></h3>
+            <h3>种族: <span id="modal-race"></span></h3>
+            <audio id="modal-audio" controls autoplay>
+                <source src="" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
-</div>
+
+    <!-- 寻访统计模态框 -->
+    <div id="statistics-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeStatisticsModal();playClickSound()">×</button>
+            <h1>寻访统计</h1>
+            <div id="statistics-content"></div>
+        </div>
+    </div>
 </div>
 
 <div id="uid-display" style="position: fixed; bottom: 10px; right: 10px; color: white; font-size: 14px;">
@@ -865,6 +950,34 @@ function getColorByRarity(rarity) {
         default: return 'black';
     }
 }
+
+    function showStatisticsModal() {
+        const modal = document.getElementById('statistics-modal');
+        const statsContent = document.getElementById('statistics-content');
+        statsContent.innerHTML = '';
+
+        for (let character in characterDrawCounts) {
+            const count = characterDrawCounts[character];
+            let rarityClass = '';
+            switch (MagmaPool.find(c => c.name === character).rarity) {
+                case '6star':
+                    rarityClass = '#FF7000'; break;
+                case '5star':
+                    rarityClass = '#FFBA03'; break;
+                case '4star':
+                    rarityClass = '#9451F8'; break;
+            }
+            statsContent.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    // 关闭寻访统计模态框
+    function closeStatisticsModal() {
+        const modal = document.getElementById('statistics-modal');
+        modal.style.display = 'none';
+    }
 </script>
 </body>
 </html>
