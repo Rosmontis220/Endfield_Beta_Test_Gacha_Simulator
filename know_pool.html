@@ -56,7 +56,7 @@
 			height: 128px;
 			background-color: #fafafa;
 			text-align: center;
-			padding-top: 0px;
+			padding-bottom: 30px;
 		}
 		.card img {
 			width: 100%;
@@ -65,16 +65,18 @@
 		}
 		.card-name {
 			font-size: 15px;
-			margin-top: 0px;
 		}
 		.card.6star .card-name {
-			color: orange;
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FF7000 100%);
+			border-bottom: 4px solid #FF7000;
 		}
 		.card.5star .card-name {
-			color: gold;
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFBA03 100%);
+			border-bottom: 4px solid #FFBA03;
 		}
 		.card.4star .card-name {
-			color: purple; 
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #9451f8 100%);
+			border-bottom: 4px solid #9451F8;
 		}
 		button {
 			padding: 10px 20px;
@@ -119,7 +121,7 @@
 }
 
 .modal-content {
-    background: white;
+    background: url('resources/background2.png');
     padding: 20px;
     border-radius: 10px;
     width: 80%;
@@ -168,23 +170,23 @@
     margin-top: 5px;
 }
 
-.modal-content h1 .orange {
-    color: orange; /* 六星橙色 */
+.modal-content h1 .#FF7000 {
+    color: #FF7000; /* 六星橙色 */
 }
 
-.modal-content h1 .gold {
-    color: gold; /* 五星金色 */
+.modal-content h1 .#FFBA03 {
+    color: #FFBA03; /* 五星金色 */
 }
 
-.modal-content h1 .purple {
-    color: purple; /* 四星紫色 */
+.modal-content h1 .#9451F8 {
+    color: #9451F8; /* 四星紫色 */
 }
-		.orange-text {
-			color: orange;
+		.#FF7000-text {
+			color: #FF7000;
 		}
 
-		.gold-text {
-			color: gold;
+		.#FFBA03-text {
+			color: #FFBA03;
 		}
 
 		.black-text {
@@ -225,8 +227,8 @@
     <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
     <img src="resources/name3.png" class="logo" alt="知与行">
     <p>
-		<span class="orange-text">伊冯 </span> 
-        <span class="gold-text">弧光 </span> 
+		<span class="#FF7000-text">伊冯 </span> 
+        <span class="#FFBA03-text">弧光 </span> 
         <span class="black-text">UP</span>
 		
 	</p>
@@ -415,7 +417,7 @@ function performDraw() {
         card.classList.add('card', character.rarity);
         card.innerHTML = `
             <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+			<div class="card-name" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, ${getColorByRarity(character.rarity)} 100%); border-bottom: 4px solid ${getColorByRarity(character.rarity)};">${character.name}</div>
 		`;
         resultDiv.appendChild(card);
     });
@@ -486,7 +488,7 @@ function PerformOneDraw() {
         card.classList.add('card', character.rarity);
         card.innerHTML = `
             <img src="${character.img}" alt="${character.name}" onclick="showCharacterModal(${JSON.stringify(character).replace(/"/g, '&quot;')})">
-			<div class="card-name" style="color: ${getColorByRarity(character.rarity)};">${character.name}</div>
+			<div class="card-name" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, ${getColorByRarity(character.rarity)} 100%); border-bottom: 4px solid ${getColorByRarity(character.rarity)};">${character.name}</div>
 		`;
         resultDiv.appendChild(card);
     });
@@ -564,11 +566,11 @@ function displayDrawnStatistics() {
         let rarityClass = '';
         switch (MagmaPool.find(c => c.name === character).rarity) {
             case '6star':
-                rarityClass = 'orange'; break;
+                rarityClass = '#FF7000'; break;
             case '5star':
-                rarityClass = 'gold'; break;
+                rarityClass = '#FFBA03'; break;
             case '4star':
-                rarityClass = 'purple'; break;
+                rarityClass = '#9451F8'; break;
         }
         statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
     }
@@ -592,13 +594,13 @@ function showCharacterModal(character) {
     modalName.className = ''; // 清空之前的颜色类
     switch (character.rarity) {
         case '6star':
-            modalName.classList.add('orange'); // 六星橙色
+            modalName.classList.add('#FF7000'); // 六星橙色
             break;
         case '5star':
-            modalName.classList.add('gold'); // 五星金色
+            modalName.classList.add('#FFBA03'); // 五星金色
             break;
         case '4star':
-            modalName.classList.add('purple'); // 四星紫色
+            modalName.classList.add('#9451F8'); // 四星紫色
             break;
     }
 
@@ -641,9 +643,9 @@ function closeModal() {
 
 function getColorByRarity(rarity) {
     switch (rarity) {
-        case '6star': return 'orange';
-        case '5star': return 'gold';
-        case '4star': return 'purple';
+        case '6star': return '#FF7000';
+        case '5star': return '#FFBA03';
+        case '4star': return '#9451F8';
         default: return 'black';
     }
 }

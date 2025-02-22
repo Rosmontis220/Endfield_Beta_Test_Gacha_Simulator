@@ -75,13 +75,13 @@
 			color: black; 
 		}
 		.card.6star .card-name {
-			color: orange;
+			color: #FF7000;
 		}
 		.card.5star .card-name {
-			color: gold;
+			color: #FFBA03;
 		}
 		.card.4star .card-name {
-			color: purple; 
+			color: #9451F8; 
 		}
 		button {
 			padding: 10px 20px;
@@ -175,23 +175,23 @@
     margin-top: 5px;
 }
 
-.modal-content h1 .orange {
-    color: orange; /* 六星橙色 */
+.modal-content h1 .#FF7000 {
+    color: #FF7000; /* 六星橙色 */
 }
 
-.modal-content h1 .gold {
-    color: gold; /* 五星金色 */
+.modal-content h1 .#FFBA03 {
+    color: #FFBA03; /* 五星金色 */
 }
 
-.modal-content h1 .purple {
-    color: purple; /* 四星紫色 */
+.modal-content h1 .#9451F8 {
+    color: #9451F8; /* 四星紫色 */
 }
-		.orange-text {
-			color: orange;
+		.#FF7000-text {
+			color: #FF7000;
 		}
 
-		.gold-text {
-			color: gold;
+		.#FFBA03-text {
+			color: #FFBA03;
 		}
 
 		.black-text {
@@ -482,11 +482,11 @@ function displayDrawnStatistics() {
         let rarityClass = '';
         switch (MagmaPool.find(c => c.name === character).rarity) {
             case '6star':
-                rarityClass = 'orange'; break;
+                rarityClass = '#FF7000'; break;
             case '5star':
-                rarityClass = 'gold'; break;
+                rarityClass = '#FFBA03'; break;
             case '4star':
-                rarityClass = 'purple'; break;
+                rarityClass = '#9451F8'; break;
         }
         statsDiv.innerHTML += `<div align="center"; style="color: ${rarityClass};">${character}: ${count}次</div>`;
     }
