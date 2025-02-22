@@ -121,7 +121,8 @@
 }
 
 .modal-content {
-    background: url('resources/background2.png');
+			background-image: url('resources/background2.jpg');
+            background-size: cover;
     padding: 20px;
     border-radius: 10px;
     width: 80%;
@@ -170,22 +171,22 @@
     margin-top: 5px;
 }
 
-.modal-content h1 .#FF7000 {
+.modal-content h1 .orange {
     color: #FF7000; /* 六星橙色 */
 }
 
-.modal-content h1 .#FFBA03 {
+.modal-content h1 .gold {
     color: #FFBA03; /* 五星金色 */
 }
 
-.modal-content h1 .#9451F8 {
+.modal-content h1 .purple {
     color: #9451F8; /* 四星紫色 */
 }
-		.#FF7000-text {
+		.orange-text {
 			color: #FF7000;
 		}
 
-		.#FFBA03-text {
+		.gold-text {
 			color: #FFBA03;
 		}
 
@@ -227,8 +228,8 @@
     <img src="resources/logo.png" class="logo" alt="明日方舟终末地">
     <img src="resources/name3.png" class="logo" alt="知与行">
     <p>
-		<span class="#FF7000-text">伊冯 </span> 
-        <span class="#FFBA03-text">弧光 </span> 
+		<span class="orange-text">伊冯 </span> 
+        <span class="gold-text">弧光 </span> 
         <span class="black-text">UP</span>
 		
 	</p>
@@ -594,13 +595,13 @@ function showCharacterModal(character) {
     modalName.className = ''; // 清空之前的颜色类
     switch (character.rarity) {
         case '6star':
-            modalName.classList.add('#FF7000'); // 六星橙色
+            modalName.classList.add('orange'); // 六星橙色
             break;
         case '5star':
-            modalName.classList.add('#FFBA03'); // 五星金色
+            modalName.classList.add('gold'); // 五星金色
             break;
         case '4star':
-            modalName.classList.add('#9451F8'); // 四星紫色
+            modalName.classList.add('purple'); // 四星紫色
             break;
     }
 
