@@ -1,5 +1,7 @@
 # 终末地二测抽卡模拟器
 
+![GitHub License](https://img.shields.io/github/license/Rosmontis220/Endfield_Beta_Test_Gacha_Simulator) 
+
 [CN](README.md) | [EN](README_en.md)
 
 模拟终末地二测抽卡 现版本：2.2.2
